@@ -12,7 +12,7 @@ export default {
       const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September",
         "October", "November", "December"];
       const date = new Date();
-      return `Today is\n${weekday[date.getDay()]}, ${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`
+      return `${weekday[date.getDay()]}, ${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`
     }
   }
 }
@@ -27,11 +27,9 @@ export default {
       <div>
         <h1 class="text-center">Play Aan Zee</h1>
       </div>
-      <div class="text-start">
-        <h6>{{ getCurrentDate }}</h6>
-      </div>
-      <div class="text-end">
-        <h6>Chill out and feel good</h6>
+      <div class="d-flex justify-content-between">
+        <h6 class="text-start">Today is <br/>{{ getCurrentDate }}</h6>
+        <h6 class="text-end">Chill out and feel good</h6>
       </div>
     </div>
     <div>
