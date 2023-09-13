@@ -6,10 +6,16 @@ export default {
       dateToday: String,
     }
   },
-  computed() {
-    this.dateToday = Date.toLocaleString()
+  computed: {
+    getCurrentDate() {
+      const weekday = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+      const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September",
+        "October", "November", "December"];
+      const date = new Date();
+      return `Today is\n${weekday[date.getDay()]}, ${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`
+    }
   }
-  }
+}
 </script>
 
 <template>
@@ -20,6 +26,9 @@ export default {
     <div class="flex-grow-1 m-2">
       <div>
         <h1 class="text-center">Play Aan Zee</h1>
+      </div>
+      <div class="text-start">
+        <h6>{{ getCurrentDate }}</h6>
       </div>
       <div class="text-end">
         <h6>Chill out and feel good</h6>
