@@ -10,17 +10,17 @@ export default {
       <ul class="navbar-nav me-auto">
         <li class="nav-item">
           <a class="nav-link active bg-success m-1" href="#">
-            <h2>First Item</h2>
+            <h2>Home</h2>
           </a>
         </li>
         <li class="nav-item">
           <a class="nav-link  bg-success m-1" href="#">
-            <h2>First Item</h2>
+            <h2>My account</h2>
           </a>
         </li>
         <li class="nav-item">
           <a class="nav-link  bg-success m-1" href="#">
-            <h2>First Item</h2>
+            <h2>My Bookings</h2>
           </a>
         </li>
         <li class="nav-item">
@@ -38,8 +38,8 @@ export default {
       </ul>
 
 
-      <button class="btn btn-lg btn-success m-1" type="button">Button</button>
-      <button class="btn btn-lg btn-success m-1" type="button">Button</button>
+      <button class="btn btn-lg btn-success m-1" type="button">Sign up</button>
+      <button class="btn btn-lg btn-success m-1" type="button">Log in</button>
     </div>
   </nav>
 </template>

@@ -1,7 +1,15 @@
 <script>
 export default {
-  name: "HeaderComponent"
-}
+  name: "HeaderComponent",
+  data() {
+    return {
+      dateToday: String,
+    }
+  },
+  computed() {
+    this.dateToday = Date.toLocaleString()
+  }
+  }
 </script>
 
 <template>
@@ -15,6 +23,7 @@ export default {
       </div>
       <div class="text-end">
         <h6>Chill out and feel good</h6>
+        <h6>{{dateToday}}</h6>
       </div>
     </div>
     <div>
