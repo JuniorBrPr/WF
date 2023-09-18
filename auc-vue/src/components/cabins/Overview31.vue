@@ -14,8 +14,10 @@ export default {
   },
   created() {
     for (let i = 0; i < 8; i++) {
+      this.lastId = this.lastId + Math.floor(Math.random() * 3) + 1
       this.cabins.push(
-          Cabin.createSampleCabin(this.lastId + Math.floor(Math.random() * 3) + 1));
+          Cabin.createSampleCabin(this.lastId)
+      )
     }
   },
 }
