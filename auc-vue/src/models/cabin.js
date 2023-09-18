@@ -4,7 +4,7 @@
  *
  * @author Joey_Poel
  */
-class Cabin{
+export class Cabin{
 
     constructor(id, image, type, pricePerWeek, location, numAvailable, description ) {
         this.id = id;
@@ -38,10 +38,10 @@ class Cabin{
     ];
 
     imageList = [
-        "../assets/h.png",
-        "../assets/h1.png",
-        "../assets/h2.png",
-        "../assets/h3.png"
+        "@/assets/h.png",
+        "@/assets/h1.png",
+        "@/assets/h2.png",
+        "@/assets/h3.png"
     ]
 
     vibeList = [
@@ -52,23 +52,9 @@ class Cabin{
         "model-1", "model-2", "model-3", "model-4", "model-5",
     ]
 
-    // Create a new Cabin instance with random properties
-    static createSampleCabin(pId = 0) {
-        const id = pId;
-        const image = this.getRandomElement(this.imageList);
-        const type = this.getRandomElement(this.typeList);
-        const description = this.createRandomDescription(this.vibeList, this.modelList, type);
-        const location = this.getRandomElement(this.locationList);
-        const numAvailable = this.getRandomDigit(0, 50);
-        const pricePerWeek = this.getPricePerWeek(description, this.typeList);
-
-        // Return the new Cabin instance
-        return new Cabin(id, image, type, pricePerWeek, location, numAvailable, description);
-    }
-
     // All functions to randomise the elements
     getRandomElement(list) {
-        const randomIndex = Math.floor(Math.random() * list.length);
+        let randomIndex = Math.floor(Math.random() * list.length);
 
         return list.getElementById(randomIndex);
     }
@@ -77,7 +63,7 @@ class Cabin{
         let vibe = list1.getElementById(Math.floor(Math.random() * list1.length)); // Randomises outcome of description
         let model = list2.getElementById(Math.floor(Math.random() * list2.length));
 
-        return toString(vibe + " " + type + ", " + model); // Puts the randomised words together
+        return vibe + " " + type + ", " + model; // Puts the randomised words together so it makes a description
     }
 
     getRandomDigit(min, max){
@@ -110,5 +96,22 @@ class Cabin{
                 break;
         }
         return price
+    }
+
+    // Create a new Cabin instance with random properties
+    static createSampleCabin(pId) {
+        const cabin = new Cabin(); // Create an instance of the Cabin class
+
+        const id = pId;
+        const image = cabin.getRandomElement(this.imageList);
+        const type = cabin.getRandomElement(this.typeList);
+        const description = cabin.createRandomDescription(this.vibeList, this.modelList, type);
+        const location = cabin.getRandomElement(this.locationList);
+        const numAvailable = cabin.getRandomDigit(0, 50);
+        const pricePerWeek = cabin.getPricePerWeek(description, this.typeList);
+
+        // Return the new Cabin instance
+        return new Cabin(id, image, type, pricePerWeek, location, numAvailable, description);
+        // return new Cabin(pId, 1, 1, 1, 1, 1, 1); // Use this return to test
     }
 }

@@ -1,20 +1,19 @@
 <template>
   <HeaderComponent/>
   <NavbarComponent/>
-  <WelcomeComponent/>
+  <OverviewComponent/>
 </template>
 
 <script>
 
 import HeaderComponent from "@/components/HeaderComponent.vue";
-import WelcomeComponent from "@/components/WelcomeComponent.vue";
 import NavbarComponent from "@/components/NavbarComponent.vue";
-
+import OverviewComponent from "@/components/cabins/OverviewComponent.vue";
 export default {
   name: 'App',
   components: {
+    OverviewComponent,
     NavbarComponent,
-    WelcomeComponent,
     HeaderComponent
   }
 }
