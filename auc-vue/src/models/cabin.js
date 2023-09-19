@@ -17,14 +17,14 @@ export class Cabin{
     }
 
     // All needed lists
-    typeList = [
+    static typeList = [
         "SmallDayTime",
         "SmallLodge",
         "LargeLodge",
         "FamilyLodge"
     ];
 
-    locationList = [
+    static locationList = [
         "Miami Beach, Florida",
         "Key West, Florida",
         "Myrtle Beach, South Carolina",
@@ -37,44 +37,44 @@ export class Cabin{
         "Los Angeles, California",
     ];
 
-    imageList = [
+    static imageList = [
         "@/assets/h.png",
         "@/assets/h1.png",
         "@/assets/h2.png",
         "@/assets/h3.png"
     ]
 
-    vibeList = [
+    static vibeList = [
         "colourful", "modern", "spacy", "white"
     ]
 
-    modelList = [
+    static modelList = [
         "model-1", "model-2", "model-3", "model-4", "model-5",
     ]
 
     // All functions to randomise the elements
-    getRandomElement(list) {
+    static getRandomElement(list) {
         let randomIndex = Math.floor(Math.random() * list.length);
 
-        return list.getElementById(randomIndex);
+        return list[randomIndex];
     }
 
-    createRandomDescription(list1, list2, type){
-        let vibe = list1.getElementById(Math.floor(Math.random() * list1.length)); // Randomises outcome of description
-        let model = list2.getElementById(Math.floor(Math.random() * list2.length));
+    static createRandomDescription(list1, list2, type){
+        let vibe = list1[(Math.floor(Math.random() * list1.length))]; // Randomises outcome of description
+        let model = list2[(Math.floor(Math.random() * list2.length))];
 
         return vibe + " " + type + ", " + model; // Puts the randomised words together so it makes a description
     }
 
-    getRandomDigit(min, max){
+    static getRandomDigit(min, max){
         return Math.floor(Math.random() * (max - min + 1) + min); // The maximum is inclusive and the minimum is inclusive
     }
 
-    getPricePerWeek(description, list){
+    static getPricePerWeek(type, list){
         let digit;
         let price;
         for (let i = 0; i < list.length; i++) { // Loops trough an array
-            if(description.equals(list(i))){ // If description is equal to description in the array
+            if(type === (list[i])){ // If description is equal to description in the array
                 digit = i // Returns the integer of the array where description is equal
             }
         }
@@ -100,15 +100,13 @@ export class Cabin{
 
     // Create a new Cabin instance with random properties
     static createSampleCabin(pId) {
-        const cabin = new Cabin(); // Create an instance of the Cabin class
-
         const id = pId;
-        const image = cabin.getRandomElement(this.imageList);
-        const type = cabin.getRandomElement(this.typeList);
-        const description = cabin.createRandomDescription(this.vibeList, this.modelList, type);
-        const location = cabin.getRandomElement(this.locationList);
-        const numAvailable = cabin.getRandomDigit(0, 50);
-        const pricePerWeek = cabin.getPricePerWeek(description, this.typeList);
+        const image = this.getRandomElement(this.imageList);
+        const type = this.getRandomElement(this.typeList);
+        const description = this.createRandomDescription(this.vibeList, this.modelList, type);
+        const location = this.getRandomElement(this.locationList);
+        const numAvailable = this.getRandomDigit(0, 50);
+        const pricePerWeek = this.getPricePerWeek(type, this.typeList);
 
         // Return the new Cabin instance
         return new Cabin(id, image, type, pricePerWeek, location, numAvailable, description);

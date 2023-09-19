@@ -14,10 +14,10 @@
     <tr v-for="cabin in cabins" :key="cabin.id">
       <td>{{ cabin.id }}</td>
       <td>{{ cabin.type }}</td>
-      <td>{{ cabin.pricePerWeek }}</td>
       <td>{{ cabin.location }}</td>
-      <td>{{ cabin.numAvailable }}</td>
       <td>{{ cabin.description }}</td>
+      <td>{{ cabin.pricePerWeek }}</td>
+      <td>{{ cabin.numAvailable }}</td>
     </tr>
     </tbody>
   </table>
