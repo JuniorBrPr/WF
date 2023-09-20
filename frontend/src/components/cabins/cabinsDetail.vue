@@ -7,7 +7,7 @@
         <tr>
           <td>Type:</td>
           <td>
-            <select :value="selectedCabin.type">
+            <select v-model="selectedCabin.type">
               <option v-for="type in Cabin.typeList" :key="type">
                 {{ type }}
               </option>
@@ -17,7 +17,7 @@
         <tr>
           <td>Location:</td>
           <td>
-            <select :value="selectedCabin.location">
+            <select v-model="selectedCabin.location">
               <option v-for="location in Cabin.locationList" :key="location">
                 {{ location }}
               </option>
@@ -27,13 +27,13 @@
         <tr>
           <td>Description:</td>
           <td>
-            <input type="text" :value="selectedCabin.description"/>
+            <input v-model="selectedCabin.description"/>
           </td>
         </tr>
         <tr>
           <td>Image</td>
           <td>
-            <select :value="selectedCabin.image">
+            <select v-model="selectedCabin.image">
               <option v-for="image in Cabin.imageList" :key="image">
                 {{ image }}
               </option>
@@ -43,13 +43,13 @@
         <tr>
           <td>Price per week:</td>
           <td>
-            <input type="number" :value="selectedCabin.pricePerWeek">
+            <input type="number" v-model="selectedCabin.pricePerWeek">
           </td>
         </tr>
         <tr>
           <td>Total availability:</td>
           <td>
-            <input type="number" :value="selectedCabin.numAvailable">
+            <input type="number" v-model="selectedCabin.numAvailable">
           </td>
         </tr>
       </table>
@@ -62,6 +62,7 @@
 </template>
 
 <script>
+
 import {Cabin} from "@/models/cabin";
 
 export default {
@@ -74,8 +75,6 @@ export default {
   props: {
     selectedCabin: Object,
   },
-  data() {
-  }
 }
 </script>
 
