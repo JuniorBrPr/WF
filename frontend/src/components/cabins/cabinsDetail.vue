@@ -53,8 +53,8 @@
           </td>
         </tr>
       </table>
+      <button type="button" class="btn btn-danger" @click="onDelete">Delete</button>
     </div>
-
     <div v-else>
       <p>Please select a cabin to view details.</p>
     </div>
@@ -75,6 +75,11 @@ export default {
   props: {
     selectedCabin: Object,
   },
+  methods: {
+    onDelete(){
+      this.$emit('delete', this.selectedCabin)
+    }
+  }
 }
 </script>
 

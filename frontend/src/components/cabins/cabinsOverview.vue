@@ -13,7 +13,7 @@
     New Cabin
   </button>
   <div class="sub-panel">
-    <CabinsDetail :selectedCabin="selectedCabin" />
+    <CabinsDetail :selectedCabin="selectedCabin" @delete="onDelete"/>
   </div>
 </template>
 
@@ -57,6 +57,13 @@ export default  {
           newCabin
       )
       this.selectedCabin = newCabin
+    },
+    onDelete(){
+      let index = this.cabins.indexOf(this.selectedCabin);
+      if(index > -1){
+        this.cabins.splice(index, 1)
+        this.selectedCabin = null
+      }
     }
   }
 }
