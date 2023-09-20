@@ -38,11 +38,12 @@ export class Cabin{
     ];
 
     static imageList = [
-        "@/assets/h.png",
-        "@/assets/h1.png",
-        "@/assets/h2.png",
-        "@/assets/h3.png"
-    ]
+        require('@/assets/h.png'),
+        require('@/assets/h1.png'),
+        require('@/assets/h2.png'),
+        require('@/assets/h3.png')
+    ];
+
 
     static vibeList = [
         "colourful", "modern", "spacy", "white"
