@@ -9,9 +9,7 @@ export default {
     <div class="container">
       <ul class="navbar-nav me-auto">
         <li class="nav-item ">
-          <a class="nav-link active m-1 item" href="#">
-            <h2>Home</h2>
-          </a>
+          <router-link class="nav-link m-1 item" to="/"><h2>Home</h2></router-link>
         </li>
         <li class="nav-item ">
           <a class="nav-link m-1 item" href="#">
@@ -29,8 +27,8 @@ export default {
               <h2>Cabins </h2>
             </a>
             <div class="dropdown-menu">
-              <a class="dropdown-item" href="#">All cabins overview</a>
-              <a class="dropdown-item" href="#">Cabins edit(components)</a>
+              <router-link class="nav-link dropdown-item" to="/overView31">All cabins overview</router-link>
+              <router-link class="nav-link dropdown-item" to="/overView32">Cabins edit(components)</router-link>
               <a class="dropdown-item" href="#">Cabins edit(routed)</a>
               <a class="dropdown-item" href="#">Cabins edit(managed)</a>
             </div>
@@ -38,8 +36,10 @@ export default {
         </li>
       </ul>
 
-      <button class="btn btn-lg btn-success m-1" type="button">Sign up</button>
-      <button class="btn btn-lg btn-success m-1" type="button">Log in</button>
+      <router-link class="nav-link btn btn-lg btn-success m-1" to="/sign-up">Sign up</router-link>
+      <router-link class="nav-link btn btn-lg btn-success m-1" to="/sign-in">Log in</router-link>
+<!--      <button class="btn btn-lg btn-success m-1" type="button">Sign up</button>-->
+<!--      <button class="btn btn-lg btn-success m-1" type="button">Log in</button>-->
     </div>
   </nav>
 </template>
@@ -47,5 +47,11 @@ export default {
 <style scoped>
 .item:hover, .dropdown-item:hover, .item:focus{
   background-color: lightgreen;
+}
+
+.nav-link.router-link-active {
+  /* Highlight styles for active link */
+  background-color: #007bff; /* Change this to your preferred highlight color */
+  color: #fff; /* Change this to your preferred text color */
 }
 </style>
