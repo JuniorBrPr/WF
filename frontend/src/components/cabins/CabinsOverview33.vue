@@ -1,31 +1,29 @@
 <template>
   <div class="card-container">
-  <card class="card" v-for="cabin in cabins"
-        :key="cabin.id"
-        @click="selectCabin(cabin)"
-        :class="{ 'selected': selectedCabin === cabin }">
-    <img class="card-image" :src="cabin.image"/>
-    <p class="card-info" >{{ cabin.type }}</p>
-    <p class="card-info" >{{ cabin.location}}</p>
-  </card>
+    <card class="card" v-for="cabin in cabins"
+          :key="cabin.id"
+          @click="selectCabin(cabin)"
+          :class="{ 'selected': selectedCabin === cabin }">
+      <img class="card-image" :src="cabin.image"/>
+      <p class="card-info">{{ cabin.type }}</p>
+      <p class="card-info">{{ cabin.location }}</p>
+    </card>
   </div>
   <button @click="onNewCabin()">
     New Cabin
   </button>
   <div class="sub-panel">
-    <CabinsDetail :selectedCabin="selectedCabin" @delete="onDelete"/>
+    <router-view v-if="selectedCabin" :selectedCabin="selectedCabin" @delete="onDelete"/>
+    <!--    <CabinsDetail :selectedCabin="selectedCabin" @delete="onDelete"/>-->
   </div>
 </template>
 
 <script>
 import {Cabin} from '@/models/cabin.js';
-import CabinsDetail from "@/components/cabins/cabinsDetail.vue"; // Import the CabinsDetail component
 
-export default  {
+export default {
   name: "cabinsOverview",
-  components: {
-    CabinsDetail,
-  },
+  components: {},
   data() {
     return {
       cabins: [],
@@ -40,16 +38,19 @@ export default  {
           Cabin.createSampleCabin(this.lastId)
       )
     }
+    this.selectedCabin = this.$route.params.id ? this.findSelectedCabinFromRoute(this.$route) : null;
   },
   methods: {
-    selectCabin(cabin){
-      if(this.selectedCabin !== cabin){
+    selectCabin(cabin) {
+      if (this.selectedCabin !== cabin) {
+        this.$router.push(this.$route.matched[0].path + '/' + cabin.id);
         this.selectedCabin = cabin;
-      } else{
+      } else {
+        this.$router.push(this.$route.matched[0].path);
         this.selectedCabin = null;
       }
     },
-    onNewCabin(){
+    onNewCabin() {
       this.lastId = this.lastId + Math.floor(Math.random() * 3) + 1
       let newCabin = Cabin.createSampleCabin(this.lastId)
 
@@ -58,14 +59,29 @@ export default  {
       )
       this.selectedCabin = newCabin
     },
-    onDelete(){
+    onDelete() {
       let index = this.cabins.indexOf(this.selectedCabin);
-      if(index > -1){
+      if (index > -1) {
         this.cabins.splice(index, 1)
         this.selectedCabin = null
       }
+    },
+    findSelectedCabinFromRoute($route) {
+      let cabinId = $route.params.id;
+      this.cabins.forEach(cabin => {
+        if (cabin.id === cabinId) {
+          return cabin;
+        }
+      })
+      return null;
+    }
+  },
+  watch: {
+    '$route'() {
+      this.selectedCabin = this.findSelectedCabinFromRoute(this.$route)
     }
   }
+
 }
 </script>
 
