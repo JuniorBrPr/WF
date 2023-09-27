@@ -16,6 +16,13 @@ export class Cabin{
         this.description = description;
     }
 
+    static copyConstructor(cabin){
+        if(cabin == null) return null;
+        let copy = Object.assign(new Cabin(0), cabin);
+        copy.location = Location.copyConstructor(cabin.location);
+        return copy;
+    }
+
     // All needed lists
     static typeList = [
         "SmallDayTime",

@@ -30,7 +30,7 @@ export default {
               <router-link class="nav-link dropdown-item" to="/overView31">All cabins overview</router-link>
               <router-link class="nav-link dropdown-item" to="/overView32">Cabins edit(components)</router-link>
               <a class="dropdown-item" href="#">Cabins edit(routed)</a>
-              <a class="dropdown-item" href="#">Cabins edit(managed)</a>
+              <router-link class="nav-link dropdown-item" to="/detail34">Cabins edit(managed)</router-link>
             </div>
           </div>
         </li>

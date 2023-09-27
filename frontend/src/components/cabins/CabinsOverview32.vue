@@ -19,7 +19,7 @@
 
 <script>
 import {Cabin} from '@/models/cabin.js';
-import CabinsDetail from "@/components/cabins/cabinsDetail32.vue"; // Import the CabinsDetail component
+import CabinsDetail from "@/components/cabins/CabinsDetail32.vue"; // Import the CabinsDetail component
 
 export default  {
   name: "cabinsOverview",

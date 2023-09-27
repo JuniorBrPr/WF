@@ -64,13 +64,16 @@
 import {Cabin} from "@/models/cabin";
 
 export default {
-  name: "cabinsDetail",
+  name: "cabinsDetail34",
+  props: ['selectedCabin'],
   computed: {
     Cabin() {
       return Cabin
     }
   },
-  props: ['selectedCabin'],
+  created() {
+    Cabin.copyConstructor(this.selectedCabin)
+  },
   methods: {
     onDelete() {
       this.$emit('delete', this.selectedCabin)
