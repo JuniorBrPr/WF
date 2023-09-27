@@ -4,7 +4,7 @@
         :key="cabin.id"
         @click="selectCabin(cabin)"
         :class="{ 'selected': selectedCabin === cabin }">
-    <img class="card-image" :src="cabin.image"/>
+    <img class="card-image" :src="cabin.getImage()"/>
     <p class="card-info" >{{ cabin.type }}</p>
     <p class="card-info" >{{ cabin.location}}</p>
   </card>
@@ -19,7 +19,7 @@
 
 <script>
 import {Cabin} from '@/models/cabin.js';
-import CabinsDetail from "@/components/cabins/cabinsDetail32.vue"; // Import the CabinsDetail component
+import CabinsDetail from "@/components/cabins/cabinsDetail32.vue"
 
 export default  {
   name: "cabinsOverview",
@@ -31,6 +31,7 @@ export default  {
       cabins: [],
       lastId: 10000,
       selectedCabin: null,
+      isActive: true,
     }
   },
   created() {

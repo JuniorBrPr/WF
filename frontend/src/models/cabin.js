@@ -16,6 +16,10 @@ export class Cabin{
         this.description = description;
     }
 
+    getImage(){
+        return require('@/assets/' + this.image + '.png');
+    }
+
     // All needed lists
     static typeList = [
         "SmallDayTime",
@@ -37,13 +41,7 @@ export class Cabin{
         "Los Angeles, California",
     ];
 
-    static imageList = [
-        require('@/assets/h.png'),
-        require('@/assets/h1.png'),
-        require('@/assets/h2.png'),
-        require('@/assets/h3.png')
-    ];
-
+    static imageList = ["h", "h1", "h2", "h3"];
 
     static vibeList = [
         "colourful", "modern", "spacy", "white"
