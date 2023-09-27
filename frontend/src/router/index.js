@@ -14,23 +14,29 @@ const routes = [
         component: welcomeComponent
     },
     {
-        path: '/overView31',
-        name: 'overView31',
-        component: cabinsOverview31
-    },
-    {
-        path: '/overView32',
-        name: 'overView32',
-        component: cabinsOverview32
-    },
-    {
-        path: '/overView33',
-        name: 'overView33',
-        component: cabinsOverview33,
+        path: '/cabins',
+        name: 'cabins',
         children: [
             {
-                path: ':id',
-                component: cabinsDetail32
+                path: 'overView31',
+                name: 'overView31',
+                component: cabinsOverview31
+            },
+            {
+                path: 'overView32',
+                name: 'overView32',
+                component: cabinsOverview32
+            },
+            {
+                path: 'overView33',
+                name: 'overView33',
+                component: cabinsOverview33,
+                children: [
+                    {
+                        path: ':id',
+                        component: cabinsDetail32
+                    }
+                ]
             }
         ]
     },

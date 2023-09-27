@@ -35,6 +35,7 @@ export default  {
     return {
       cabins: [],
       lastId: 10000,
+      isActive: true,
     }
   },
   created() {
