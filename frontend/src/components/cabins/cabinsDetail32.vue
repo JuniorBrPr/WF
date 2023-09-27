@@ -84,12 +84,14 @@ export default {
     }
   },
 
+  created() {
+    this.selectedCabin = this.$route.params.id ? this.findSelectedCabinFromRoute(this.$route.params.id) : null;
+  },
   methods: {
     onDelete() {
       this.$emit('delete', this.selectedCabin)
     },
     findSelectedCabinFromRoute(id) {
-      if (!id || this.cabins == null) return null
       for (let i = 0; i < this.cabins.length; i++) {
         if (this.cabins[i].id === parseInt(id)) {
           return this.cabins[i]

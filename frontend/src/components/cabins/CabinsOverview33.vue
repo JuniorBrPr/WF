@@ -15,7 +15,7 @@
     <button class="btn btn-primary" @click="onNewCabin()">
       New Cabin
     </button>
-      <router-view v-if="selectedCabin" :cabins="cabins" :selectedCabin="selectedCabin" @delete="onDelete"/>
+      <router-view :cabins="cabins" @delete="onDelete"/>
   </div>
 </template>
 
