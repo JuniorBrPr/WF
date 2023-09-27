@@ -16,9 +16,10 @@ export class Cabin{
         this.description = description;
     }
 
-    getImage(){
+    getImage() {
         return require('@/assets/' + this.image + '.png');
-        
+    }
+
     static copyConstructor(cabin){
         if(cabin == null) return null;
         let copy = Object.assign(new Cabin(0), cabin);
