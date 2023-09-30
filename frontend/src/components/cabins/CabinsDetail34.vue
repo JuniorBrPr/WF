@@ -96,11 +96,10 @@ export default {
   },
   methods: {
     onClear() {
-      // Clear the selectedCabin properties
       this.selectedCabin.type = null;
       this.selectedCabin.location = null;
       this.selectedCabin.description = null;
-      this.selectedCabin.image = null;
+      this.selectedCabin.image = null; // Set to empty string
       this.selectedCabin.pricePerWeek = null;
       this.selectedCabin.numAvailable = null;
     },

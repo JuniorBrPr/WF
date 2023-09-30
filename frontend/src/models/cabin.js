@@ -17,7 +17,10 @@ export class Cabin{
     }
 
     getImage() {
-        return require('@/assets/' + this.image + '.png');
+        if(this.image != null){
+            return require('@/assets/' + this.image + '.png');
+        }
+        return null
     }
 
     static copyConstructor(cabin) {
