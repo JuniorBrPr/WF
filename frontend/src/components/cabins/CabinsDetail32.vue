@@ -75,7 +75,10 @@ export default {
       return Cabin
     }
   },
-  props: ['cabins'],
+  props: {
+    selected: Object,
+    cabins: Array
+},
 
   data() {
     return {
@@ -84,7 +87,12 @@ export default {
   },
 
   created() {
-    this.selectedCabin = this.$route.params.id ? this.findSelectedCabinFromRoute(this.$route.params.id) : null;
+    if (this.selected) {
+      this.selectedCabin = this.selected
+    }
+    if (this.cabins) {
+      this.selectedCabin = this.findSelectedCabinFromRoute(this.$route.params.id)
+    }
   },
   methods: {
     onDelete() {
@@ -102,6 +110,9 @@ export default {
   watch: {
     '$route.params.id'(id) {
       this.selectedCabin = this.findSelectedCabinFromRoute(id)
+    },
+    'selected'(selected) {
+      this.selectedCabin = selected
     }
   }
 }
@@ -112,7 +123,7 @@ select, input {
   min-width: 300px;
 }
 
-.card-image{
+.card-image {
   width: 20%;
   height: 20%;
 }
