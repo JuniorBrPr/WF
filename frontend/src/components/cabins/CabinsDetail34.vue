@@ -85,15 +85,34 @@ export default {
 
   data() {
     return {
-      selectedCabin: null
+      selectedCabin: null,
+      copyOfCabin: null
     }
   },
 
   created() {
     this.selectedCabin = this.$route.params.id ? this.findSelectedCabinFromRoute(this.$route.params.id) : null;
-    Cabin.copyConstructor(this.selectedCabin)
+    this.copyOfCabin = Cabin.copyConstructor(this.selectedCabin)
   },
   methods: {
+    onClear(){
+      this.selectedCabin = this.$route.params.id ? this.findSelectedCabinFromRoute(this.$route.params.id) : null;
+      this.selectedCabin.type = null;
+      this.selectedCabin.location = null;
+      this.selectedCabin.description = null;
+      this.selectedCabin.image = null;
+      this.selectedCabin.pricePerWeek = null;
+      this.selectedCabin.numAvailable = null;
+    },
+    onReset(){
+      this.selectedCabin = this.$route.params.id ? this.findSelectedCabinFromRoute(this.$route.params.id) : null;
+      this.selectedCabin.type = this.copyOfCabin.type;
+      this.selectedCabin.location = this.copyOfCabin.location;
+      this.selectedCabin.description = this.copyOfCabin.description;
+      this.selectedCabin.image = this.copyOfCabin.image;
+      this.selectedCabin.pricePerWeek = this.copyOfCabin.pricePerWeek;
+      this.selectedCabin.numAvailable = this.copyOfCabin.numAvailable;
+    },
     onDelete() {
       this.$emit('delete', this.selectedCabin)
     },
@@ -109,7 +128,7 @@ export default {
   watch: {
     '$route.params.id'(id) {
       this.selectedCabin = this.findSelectedCabinFromRoute(id)
-      Cabin.copyConstructor(this.selectedCabin)
+      this.copyOfCabin = Cabin.copyConstructor(this.selectedCabin)
     }
   }
 }
