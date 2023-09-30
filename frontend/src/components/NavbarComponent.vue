@@ -15,13 +15,12 @@
             <h2>My Bookings</h2>
           </a>
         </li>
-        <li class="nav-item dropdown">
-          <div class="nav-link item cursor-pointer"
-               :class="{active: this.cabinsActive}"
-               data-bs-toggle="dropdown">
+        <li class="nav-item dropdown" >
+          <div class="nav-link item cursor-pointer" :class="{active: this.cabinsActive}"
+               data-bs-toggle="dropdown" aria-expanded="false">
             <h2 class="pe-auto dropdown-toggle">Cabins </h2>
           </div>
-          <div class="dropdown-menu">
+          <div class="dropdown-menu" @focusout="this.hideDropdown">
             <router-link class="nav-link dropdown-item" :class="{ active: isActive }" to="/cabins/overView31">
               All cabins overview
             </router-link>
@@ -50,7 +49,11 @@ export default {
   data() {
     return {
       cabinsActive: false,
-      display: false,
+    }
+  },
+  methods:  {
+    hideDropdown(){
+      this.$el.querySelector(".dropdown-menu").classList.remove('show');
     }
   },
 
