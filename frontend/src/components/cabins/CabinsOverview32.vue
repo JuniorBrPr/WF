@@ -1,19 +1,21 @@
 <template>
-  <div class="card-container">
-  <card class="card" v-for="cabin in cabins"
-        :key="cabin.id"
-        @click="selectCabin(cabin)"
-        :class="{ 'selected': selectedCabin === cabin }">
-    <img class="card-image" :src="cabin.getImage()"/>
-    <p class="card-info" >{{ cabin.type }}</p>
-    <p class="card-info" >{{ cabin.location}}</p>
-  </card>
-  </div>
-  <button @click="onNewCabin()">
-    New Cabin
-  </button>
-  <div class="sub-panel">
-    <CabinsDetail :selectedCabin="selectedCabin" @delete="onDelete"/>
+  <div class="container text-center">
+    <div class="list-group list-group-horizontal position-relative overflow-auto">
+      <div class="card list-group-item border-2" v-for="cabin in cabins"
+           :key="cabin.id"
+           @click="selectCabin(cabin)"
+           :class="{ 'border-success': selectedCabin === cabin }">
+        <img class="card-img-top rounded mx-auto d-block" :src="cabin.getImage()" alt="Card image cap">
+        <div class="card-body">
+          <p class="card-info">{{ cabin.type }}</p>
+          <p class="card-info">{{ cabin.location }}</p>
+        </div>
+      </div>
+    </div>
+    <button class="btn btn-primary" @click="onNewCabin()">
+      New Cabin
+    </button>
+    <CabinsDetail :selected="selectedCabin" @delete="onDelete"/>
   </div>
 </template>
 
@@ -21,7 +23,7 @@
 import {Cabin} from '@/models/cabin.js';
 import CabinsDetail from "@/components/cabins/CabinsDetail32.vue"
 
-export default  {
+export default {
   name: "cabinsOverview",
   components: {
     CabinsDetail,
@@ -43,14 +45,14 @@ export default  {
     }
   },
   methods: {
-    selectCabin(cabin){
-      if(this.selectedCabin !== cabin){
+    selectCabin(cabin) {
+      if (this.selectedCabin !== cabin) {
         this.selectedCabin = cabin;
-      } else{
+      } else {
         this.selectedCabin = null;
       }
     },
-    onNewCabin(){
+    onNewCabin() {
       this.lastId = this.lastId + Math.floor(Math.random() * 3) + 1
       let newCabin = Cabin.createSampleCabin(this.lastId)
 
@@ -59,7 +61,7 @@ export default  {
       )
       this.selectedCabin = newCabin
     },
-    onDelete(){
+    onDelete() {
       let index = this.cabins.indexOf(this.selectedCabin);
       if(index > -1){
         this.cabins.splice(index, 1)
@@ -72,36 +74,13 @@ export default  {
 
 
 <style scoped>
-.card-container {
-  display: flex;
-  overflow-x: auto; /* Enable horizontal scrolling */
-  white-space: nowrap; /* Prevent card wrapping to the next line */
-  gap: 10px; /* Add some spacing between cards */
-  width: 100%; /* Specify a width for the container */
-}
-
 .card {
-  background-color: #fff;
-  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
-  overflow: hidden; /* Crop overflowing content */
-  text-align: center;
+  min-width: 200px;
+  min-height: fit-content;
 }
 
-.card-image {
-  max-height: 200px; /* Set a maximum height for the image */
-  overflow: hidden; /* Crop the image if it's too tall */
-}
-
-.card-image img {
-  width: 100%; /* Ensure the image takes up the full width of its container */
-  height: auto; /* Maintain the image's aspect ratio */
-}
-
-.card-info {
-  padding: 10px;
-}
-
-.selected {
-  border: 2px solid blue;
+.card-img-top {
+  width: 150px;
+  height: 150px;
 }
 </style>

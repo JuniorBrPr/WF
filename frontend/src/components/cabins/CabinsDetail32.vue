@@ -57,7 +57,6 @@
         <button type="button" class="btn btn-danger" @click="onDelete">Delete</button>
       </div>
     </div>
-
   </div>
   <div v-else class="container">
     <h2>No cabin selected</h2>
