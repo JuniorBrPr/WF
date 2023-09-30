@@ -70,33 +70,33 @@
 </template>
 
 <script>
-
-
-import {Cabin} from "@/models/cabin";
+import { Cabin } from "@/models/cabin";
 
 export default {
   name: "cabinsDetail34",
   computed: {
     Cabin() {
-      return Cabin
-    }
+      return Cabin;
+    },
   },
-  props: ['cabins'],
+  props: ["cabins"],
 
   data() {
     return {
       selectedCabin: null,
-      copyOfCabin: null
-    }
+      copyOfCabin: null,
+    };
   },
 
   created() {
-    this.selectedCabin = this.$route.params.id ? this.findSelectedCabinFromRoute(this.$route.params.id) : null;
-    this.copyOfCabin = Cabin.copyConstructor(this.selectedCabin)
+    this.selectedCabin = this.$route.params.id
+        ? this.findSelectedCabinFromRoute(this.$route.params.id)
+        : null;
+    this.copyOfCabin = Cabin.copyConstructor(this.selectedCabin);
   },
   methods: {
-    onClear(){
-      this.selectedCabin = this.$route.params.id ? this.findSelectedCabinFromRoute(this.$route.params.id) : null;
+    onClear() {
+      // Clear the selectedCabin properties
       this.selectedCabin.type = null;
       this.selectedCabin.location = null;
       this.selectedCabin.description = null;
@@ -104,8 +104,8 @@ export default {
       this.selectedCabin.pricePerWeek = null;
       this.selectedCabin.numAvailable = null;
     },
-    onReset(){
-      this.selectedCabin = this.$route.params.id ? this.findSelectedCabinFromRoute(this.$route.params.id) : null;
+    onReset() {
+      // Reset the selectedCabin properties using the copyOfCabin
       this.selectedCabin.type = this.copyOfCabin.type;
       this.selectedCabin.location = this.copyOfCabin.location;
       this.selectedCabin.description = this.copyOfCabin.description;
@@ -114,24 +114,25 @@ export default {
       this.selectedCabin.numAvailable = this.copyOfCabin.numAvailable;
     },
     onDelete() {
-      this.$emit('delete', this.selectedCabin)
+      this.$emit("delete", this.selectedCabin);
     },
     findSelectedCabinFromRoute(id) {
       for (let i = 0; i < this.cabins.length; i++) {
         if (this.cabins[i].id === parseInt(id)) {
-          return this.cabins[i]
+          return this.cabins[i];
         }
       }
-      return null
-    }
+      return null;
+    },
   },
   watch: {
-    '$route.params.id'(id) {
-      this.selectedCabin = this.findSelectedCabinFromRoute(id)
-      this.copyOfCabin = Cabin.copyConstructor(this.selectedCabin)
-    }
-  }
-}
+    "$route.params.id"(id) {
+      // Update the selectedCabin and copyOfCabin when the route changes
+      this.selectedCabin = this.findSelectedCabinFromRoute(id);
+      this.copyOfCabin = Cabin.copyConstructor(this.selectedCabin);
+    },
+  },
+};
 </script>
 
 <style scoped>
