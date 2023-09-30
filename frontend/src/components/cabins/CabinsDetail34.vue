@@ -99,21 +99,18 @@ export default {
       this.selectedCabin.type = null;
       this.selectedCabin.location = null;
       this.selectedCabin.description = null;
-      this.selectedCabin.image = null; // Set to empty string
+      this.selectedCabin.image = null;
       this.selectedCabin.pricePerWeek = null;
       this.selectedCabin.numAvailable = null;
     },
     onReset() {
       // Reset the selectedCabin properties using the copyOfCabin
-      this.selectedCabin.type = this.copyOfCabin.type;
-      this.selectedCabin.location = this.copyOfCabin.location;
-      this.selectedCabin.description = this.copyOfCabin.description;
-      this.selectedCabin.image = this.copyOfCabin.image;
-      this.selectedCabin.pricePerWeek = this.copyOfCabin.pricePerWeek;
-      this.selectedCabin.numAvailable = this.copyOfCabin.numAvailable;
+      this.selectedCabin = this.copyOfCabin;
+
     },
     onDelete() {
       this.$emit("delete", this.selectedCabin);
+      this.selectedCabin = null;
     },
     findSelectedCabinFromRoute(id) {
       for (let i = 0; i < this.cabins.length; i++) {
