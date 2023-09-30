@@ -105,12 +105,24 @@ export default {
     },
     onReset() {
       // Reset the selectedCabin properties using the copyOfCabin
-      this.selectedCabin = this.copyOfCabin;
+      this.selectedCabin.type = this.copyOfCabin.type;
+      this.selectedCabin.location = this.copyOfCabin.location;
+      this.selectedCabin.description = this.copyOfCabin.description;
+      this.selectedCabin.image = this.copyOfCabin.image;
+      this.selectedCabin.pricePerWeek = this.copyOfCabin.pricePerWeek;
+      this.selectedCabin.numAvailable = this.copyOfCabin.numAvailable;
+    },
+    onCancel(){
+      this.onReset()
+      this.$router.push("/cabins/overView34");
+    },
+    onSave(){
 
+      this.$router.push("/cabins/overView34");
     },
     onDelete() {
       this.$emit("delete", this.selectedCabin);
-      this.selectedCabin = null;
+      this.$router.push("/cabins/overView34");
     },
     findSelectedCabinFromRoute(id) {
       for (let i = 0; i < this.cabins.length; i++) {
