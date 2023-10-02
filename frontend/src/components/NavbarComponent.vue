@@ -30,7 +30,9 @@
             <router-link class="nav-link dropdown-item" to="/cabins/overView33" :class="{ active: isActive }">
               Cabins edit(routed)
             </router-link>
-            <a class="dropdown-item disabled" href="#">Cabins edit(managed)</a>
+            <router-link class="nav-link dropdown-item" to="/cabins/overView34" :class="{ active: isActive }">
+              Cabins edit(guarded)
+            </router-link>
           </div>
         </li>
       </ul>

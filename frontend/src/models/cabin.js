@@ -17,14 +17,17 @@ export class Cabin{
     }
 
     getImage() {
-        return require('@/assets/' + this.image + '.png');
+        if(this.image != null){
+            return require('@/assets/' + this.image + '.png');
+        }
+        return null
     }
 
-    static copyConstructor(cabin){
-        if(cabin == null) return null;
-        let copy = Object.assign(new Cabin(0), cabin);
-        copy.location = Location.copyConstructor(cabin.location);
-        return copy;
+    static copyConstructor(cabin) {
+        if (cabin == null) return null;
+        // Remove the line below that tries to deep clone the 'location' property
+        // copy.location = Location.copyConstructor(cabin.location);
+        return Object.assign(new Cabin(cabin.id), cabin);
     }
 
     // All needed lists

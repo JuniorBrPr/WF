@@ -15,7 +15,7 @@
     <button class="btn btn-primary" @click="onNewCabin()">
       New Cabin
     </button>
-      <router-view :cabins="cabins" @delete="onDelete"/>
+    <router-view :cabins="cabins" @delete="onDelete"/>
   </div>
 </template>
 
@@ -23,7 +23,7 @@
 import {Cabin} from '@/models/cabin.js';
 
 export default {
-  name: "cabinsOverview",
+  name: "cabinsOverview34",
   components: {},
   data() {
     return {
