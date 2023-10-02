@@ -108,10 +108,10 @@ export default {
     }
   },
   watch: {
-    '$route.params.id'(id) {
+    "$route.params.id"(id) {
       this.selectedCabin = this.findSelectedCabinFromRoute(id)
     },
-    'selected'(selected) {
+    "selected"(selected) {
       this.selectedCabin = selected
     }
   }

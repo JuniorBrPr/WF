@@ -54,12 +54,26 @@
             </td>
           </tr>
         </table>
-        <button type="button" class="btn btn-danger" @click="onSave">Save</button>
-        <button type="button" class="btn btn-danger" @click="onCancel">Cancel</button>
-        <button type="button" class="btn btn-danger" @click="onReset">Reset</button>
-        <button type="button" class="btn btn-danger" @click="onClear">Clear</button>
-        <button type="button" class="btn btn-danger" @click="onDelete">Delete</button>
-        <button type="button" class="btn btn-danger" @click="onDelete">Delete</button>
+        <div class="btn-group" role="group" aria-label="Cabin state actions">
+          <button type="button" class="btn btn-danger" :class="{disabled:this.hasChanged}" @click="onSave">
+            Save
+          </button>
+          <button type="button" class="btn btn-danger" :class="{disabled:this.hasChanged}" @click="onCancel">
+            Cancel
+          </button>
+          <button type="button" class="btn btn-danger" :class="{disabled:this.hasChanged}" @click="onReset">
+            Reset
+          </button>
+          <button type="button" class="btn btn-danger" :class="{disabled:this.hasChanged}" @click="onClear">
+            Clear
+          </button>
+          <button type="button" class="btn btn-danger" :class="{disabled:this.hasChanged}" @click="onDelete">
+            Delete
+          </button>
+          <button type="button" class="btn btn-danger" :value="{disabled:this.hasChanged}" @click="onDelete">
+            Delete
+          </button>
+        </div>
       </div>
     </div>
 
@@ -70,7 +84,7 @@
 </template>
 
 <script>
-import { Cabin } from "@/models/cabin";
+import {Cabin} from "@/models/cabin";
 
 export default {
   name: "cabinsDetail34",
@@ -78,6 +92,12 @@ export default {
     Cabin() {
       return Cabin;
     },
+    hasChanged() {
+      if (this.selectedCabin === null || this.copyOfCabin === null) {
+        return false;
+      }
+      return Cabin.equals(this.selectedCabin, this.copyOfCabin) ;
+    }
   },
   props: ["cabins"],
 
@@ -112,11 +132,11 @@ export default {
       this.selectedCabin.pricePerWeek = this.copyOfCabin.pricePerWeek;
       this.selectedCabin.numAvailable = this.copyOfCabin.numAvailable;
     },
-    onCancel(){
+    onCancel() {
       this.onReset()
       this.$router.push("/cabins/overView34");
     },
-    onSave(){
+    onSave() {
 
       this.$router.push("/cabins/overView34");
     },
@@ -148,7 +168,7 @@ select, input {
   min-width: 300px;
 }
 
-.card-image{
+.card-image {
   width: 20%;
   height: 20%;
 }

@@ -121,4 +121,15 @@ export class Cabin{
         return new Cabin(id, image, type, pricePerWeek, location, numAvailable, description);
         // return new Cabin(pId, 1, 1, 1, 1, 1, 1); // Use this return to test
     }
+
+    static equals(cabin1, cabin2) {
+        if (cabin1 == null || cabin2 == null) return false;
+        const keysCabin1 = Object.keys(cabin1);
+        const keysCabin2 = Object.keys(cabin2);
+        if (keysCabin1.length !== keysCabin2.length) return false;
+        for (const key of keysCabin1) {
+            if (cabin1[key] !== cabin2[key]) return false;
+        }
+        return true;
+    }
 }
