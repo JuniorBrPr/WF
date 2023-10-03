@@ -1,14 +1,14 @@
 <template>
-  <div class="container text-center">
-    <div class="list-group list-group-horizontal position-relative overflow-auto">
-      <div class="card list-group-item border-2" v-for="cabin in cabins"
+  <div class="container-fluid text-center mt-2">
+    <div class="row flex-nowrap list-group list-group-horizontal position-relative overflow-auto">
+      <div class="card list-group-item m-2" v-for="cabin in cabins"
            :key="cabin.id"
            @click="selectCabin(cabin)"
            :class="{ 'border-success': selectedCabin === cabin }">
         <img class="card-img-top rounded mx-auto d-block" :src="cabin.getImage()" alt="Card image cap">
         <div class="card-body">
-          <p class="card-info">{{ cabin.type }}</p>
-          <p class="card-info">{{ cabin.location }}</p>
+          <h6 class="card-title">Cabin {{ cabin.id }}</h6>
+          <p class="card-info t"><strong>Type:</strong> {{ cabin.type }}<br><strong>Location:</strong> {{ cabin.location }}</p>
         </div>
       </div>
     </div>
@@ -86,12 +86,6 @@ export default {
 
 <style scoped>
 .card {
-  min-width: 200px;
-  min-height: fit-content;
-  /*padding: 2px;*/
-}
-.card-img-top {
   width: 150px;
-  height: 150px;
 }
 </style>
