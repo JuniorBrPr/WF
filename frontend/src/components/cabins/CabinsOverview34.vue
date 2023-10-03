@@ -1,27 +1,33 @@
 <template>
-  <div class="container-fluid px-5 text-center">
-    <div class="col">
-        <div class="row flex-nowrap overflow-auto py-1">
-          <div class="cabin border rounded-2 border-2 border-light-subtle  justify-content-center " v-for="cabin in cabins"
-               :key="cabin.id"
-               @click="selectCabin(cabin)"
-               :class="{ 'border-success': selectedCabin === cabin }">
+  <div class="col px-5 text-center">
+    <div class="row">
+      <div class="col col-auto align-self-center">
+        <button class="btn btn-lg btn-success" @click="onNewCabin()">
+          New Cabin
+        </button>
+      </div>
+      <div class="col col-10">
+        <div class="row flex-nowrap overflow-auto p-2">
+          <div class="cabin col col-2 border border-secondary-subtle rounded-2 justify-content-center mx-1 "
+               v-for="cabin in cabins" :key="cabin.id" @click="selectCabin(cabin)"
+               :class="{active:selectedCabin === cabin}">
             <div class="row justify-content-center">
               <img class="card-img rounded" :src="cabin.getImage()" alt="Card image cap">
             </div>
             <div class="mt-1">
               <h6 class="fw-medium">Cabin {{ cabin.id }}</h6>
-              <p class="fw-light" ><strong>Type:</strong> {{ cabin.type }}<br><strong>Location:</strong> {{ cabin.location }}</p>
+              <p class="fw-light">
+                <strong>Type:</strong> {{ cabin.type }}
+                <br><strong>Location:</strong> {{cabin.location }}
+              </p>
             </div>
           </div>
+        </div>
       </div>
-      <div class="row">
-        <button class="btn btn-primary" @click="onNewCabin()">
-          New Cabin
-        </button>
-        <router-view :cabins="cabins" @delete="onDelete"/>
-      </div>
-   </div>
+    </div>
+    <div class="row">
+      <router-view :cabins="cabins" @delete="onDelete"/>
+    </div>
   </div>
 </template>
 
@@ -30,6 +36,11 @@ import {Cabin} from '@/models/cabin.js';
 
 export default {
   name: "cabinsOverview34",
+  computed: {
+    Cabin() {
+      return Cabin
+    }
+  },
   components: {},
   data() {
     return {
@@ -47,7 +58,7 @@ export default {
           Cabin.createSampleCabin(this.lastId)
       )
     }
-    this.selectedCabin = this.$route.params.id ? this.findSelectedCabinFromRoute(this.$route) : null;
+    this.selectedCabin = this.findSelectedCabinFromRoute(this.$route);
   },
 
   methods: {
@@ -68,7 +79,7 @@ export default {
           newCabin
       )
       this.selectedCabin = newCabin
-      this.$router.push("/cabins/overView34/"+ this.lastId);
+      this.$router.push("/cabins/overView34/" + this.lastId);
     },
     onDelete() {
       let index = this.cabins.indexOf(this.selectedCabin);
@@ -79,11 +90,12 @@ export default {
     },
     findSelectedCabinFromRoute($route) {
       let cabinId = $route.params.id;
-      this.cabins.forEach(cabin => {
-        if (cabin.id === cabinId) {
-          return cabin;
+      for (let i = 0; i < this.cabins.length; i++) {
+        if (this.cabins[i].id === parseInt(cabinId)) {
+          console.log(cabinId);
+          return this.cabins[i];
         }
-      })
+      }
       return null;
     }
   }
@@ -92,16 +104,18 @@ export default {
 
 <style scoped>
 .card-img {
-  width: 65%;
-  height: 65%;
+  width: 50%;
+  height: 50%;
 }
 
 .cabin {
-  width: 200px;
-  height: 220px;
+  min-width: 100px;
+  min-height: fit-content;
+  max-width: 200px;
+  max-height: 250px;
 }
 
-.container-fluid {
-  max-height: 90%;
+.active {
+  background-color: lightgreen;
 }
 </style>

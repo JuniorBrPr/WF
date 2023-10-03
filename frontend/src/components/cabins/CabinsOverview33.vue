@@ -62,7 +62,7 @@ export default {
           newCabin
       )
       this.selectedCabin = newCabin
-      this.$router.push("/cabins/overView34/"+ this.lastId);
+      this.$router.push("/cabins/overView33/"+ this.lastId);
     },
     onDelete() {
       let index = this.cabins.indexOf(this.selectedCabin);

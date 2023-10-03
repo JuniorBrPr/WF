@@ -1,65 +1,66 @@
 <template>
-  <div v-if="this.selectedCabin" class="row py-4 py-xl-5">
-        <div class="col">
-          <img class="img-fluid" alt="Cabin image" :src="selectedCabin.getImage()"/>
-        </div>
-        <div class="col-md-6 col-xl-8">
-          <div>
-            <form class="p-2 p-xl-4">
-              <h3>Cabin {{ selectedCabin.id }}</h3>
-              <p class="text-muted">Details</p>
-              <div class="mt-1 mb-1 row">
-                <div class="col">
-                  <label class="form-label" for="type">Type</label>
-                  <select class="form-control" id="type" v-model="selectedCabin.type">
-                    <option v-for="type in Cabin.typeList" :key="type">
-                      {{ type }}
-                    </option>
-                  </select>
-                </div>
-                <div class="col">
-                  <label class="form-label" for="image">Image</label>
-                  <select class="form-control" id="image" v-model="selectedCabin.image">
-                    <option v-for="image in Cabin.imageList" :key="image">
-                      {{ image }}
-                    </option>
-                  </select>
-                </div>
-              </div>
-              <div class="row mb-1">
-                <div class="col">
-                  <label class="form-label" for="pricePerWeek">Price per week</label>
-                  <input class="form-control" id="pricePerWeek" type="number" v-model="selectedCabin.pricePerWeek"/>
-                </div>
-                <div class="col">
-                  <label class="form-label" for="numAvailable">Total availability</label>
-                  <input class="form-control" id="numAvailable" type="number" v-model="selectedCabin.numAvailable"/>
-                </div>
-              </div>
-              <div class="mb-1">
-                <label class="form-label" for="location">Location</label>
-                <select class="form-control" id="location" v-model="selectedCabin.location">
-                  <option v-for="location in Cabin.locationList" :key="location">
-                    {{ location }}
+  <div v-if="this.selectedCabin" class="row detail">
+    <div class="row">
+      <div class="col col-4 p5">
+        <img class="img-fluid p-5" alt="Cabin image" :src="selectedCabin.getImage()"/>
+      </div>
+      <div class="col-md-6 col-xl-8">
+        <div>
+          <form class="p-1 p-xl-4">
+            <h3>Cabin {{ selectedCabin.id }}</h3>
+            <p class="text-muted">Details</p>
+            <div class="mt-1 mb-1 row">
+              <div class="col">
+                <label class="form-label" for="type">Type</label>
+                <select class="form-control" id="type" v-model="selectedCabin.type">
+                  <option v-for="type in Cabin.typeList" :key="type">
+                    {{ type }}
                   </option>
                 </select>
               </div>
-              <div class="mb-1">
-                <label class="form-label" for="description">Description</label>
-                <textarea class="form-control" id="description" type="text" rows="3"
-                          v-model="selectedCabin.description"/>
+              <div class="col">
+                <label class="form-label" for="image">Image</label>
+                <select class="form-control" id="image" v-model="selectedCabin.image">
+                  <option v-for="image in Cabin.imageList" :key="image">
+                    {{ image }}
+                  </option>
+                </select>
               </div>
-            </form>
-          </div>
-      </div>
-      <div class="row mt-1">
-        <div class="col btn-group">
-          <button class="btn btn-secondary" @click="onSave" :disabled="hasChanged">Save</button>
-          <button class="btn btn-secondary" @click="onReset" :disabled="hasChanged">Reset</button>
-          <button class="btn btn-secondary" @click="onClear" :disabled="hasChanged">Clear</button>
-          <button class="btn btn-secondary" @click="onCancel">Cancel</button>
-          <button class="btn btn-danger" @click="onDelete" :disabled="!hasChanged">Delete</button>
+            </div>
+            <div class="row mb-1">
+              <div class="col">
+                <label class="form-label" for="pricePerWeek">Price per week</label>
+                <input class="form-control" id="pricePerWeek" type="number" v-model="selectedCabin.pricePerWeek"/>
+              </div>
+              <div class="col">
+                <label class="form-label" for="numAvailable">Total availability</label>
+                <input class="form-control" id="numAvailable" type="number" v-model="selectedCabin.numAvailable"/>
+              </div>
+            </div>
+            <div class="mb-1">
+              <label class="form-label" for="location">Location</label>
+              <select class="form-control" id="location" v-model="selectedCabin.location">
+                <option v-for="location in Cabin.locationList" :key="location">
+                  {{ location }}
+                </option>
+              </select>
+            </div>
+            <div class="mb-1">
+              <label class="form-label" for="description">Description</label>
+              <input class="form-control" id="description" type="text" v-model="selectedCabin.description"/>
+            </div>
+          </form>
         </div>
+      </div>
+    </div>
+    <div class="row p-2">
+      <div class="col btn-group">
+        <button class="btn btn-secondary" @click="onSave" :disabled="hasChanged">Save</button>
+        <button class="btn btn-secondary" @click="onReset" :disabled="hasChanged">Reset</button>
+        <button class="btn btn-secondary" @click="onClear" :disabled="hasChanged">Clear</button>
+        <button class="btn btn-secondary" @click="onCancel">Cancel</button>
+        <button class="btn btn-danger" @click="onDelete" :disabled="!hasChanged">Delete</button>
+      </div>
     </div>
   </div>
   <div v-else class="container">
@@ -135,4 +136,9 @@ export default {
 </script>
 
 <style scoped>
+.img-fluid {
+  max-width: 75%;
+  max-height: 75%;
+}
+
 </style>
