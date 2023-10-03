@@ -1,8 +1,8 @@
 <template>
-  <div v-if="this.selectedCabin" class="row detail">
+  <div v-if="this.copyOfCabin" class="row detail">
     <div class="row">
       <div class="col col-4 p5">
-        <img class="img-fluid p-5" alt="Cabin image" :src="selectedCabin.getImage()"/>
+        <img class="img-fluid p-5" alt="Cabin image" :src="this.copyOfCabin.getImage()"/>
       </div>
       <div class="col-md-6 col-xl-8">
         <div>
@@ -12,7 +12,7 @@
             <div class="mt-1 mb-1 row">
               <div class="col">
                 <label class="form-label" for="type">Type</label>
-                <select class="form-control" id="type" v-model="selectedCabin.type">
+                <select class="form-control" id="type" v-model="this.copyOfCabin.type">
                   <option v-for="type in Cabin.typeList" :key="type">
                     {{ type }}
                   </option>
@@ -20,34 +20,38 @@
               </div>
               <div class="col">
                 <label class="form-label" for="image">Image</label>
-                <select class="form-control" id="image" v-model="selectedCabin.image">
+                <select class="form-control" id="image" v-model="this.copyOfCabin.image">
                   <option v-for="image in Cabin.imageList" :key="image">
                     {{ image }}
                   </option>
                 </select>
               </div>
             </div>
-            <div class="row mb-1">
+            <div class="row">
               <div class="col">
                 <label class="form-label" for="pricePerWeek">Price per week</label>
-                <input class="form-control" id="pricePerWeek" type="number" v-model="selectedCabin.pricePerWeek"/>
+                <input class="form-control" id="pricePerWeek" type="number" v-model="this.copyOfCabin.pricePerWeek"/>
               </div>
               <div class="col">
                 <label class="form-label" for="numAvailable">Total availability</label>
-                <input class="form-control" id="numAvailable" type="number" v-model="selectedCabin.numAvailable"/>
+                <input class="form-control" id="numAvailable" type="number" v-model="this.copyOfCabin.numAvailable"/>
               </div>
             </div>
-            <div class="mb-1">
-              <label class="form-label" for="location">Location</label>
-              <select class="form-control" id="location" v-model="selectedCabin.location">
-                <option v-for="location in Cabin.locationList" :key="location">
-                  {{ location }}
-                </option>
-              </select>
+            <div class="row">
+              <div class="col">
+                <label class="form-label" for="location">Location</label>
+                <select class="form-control" id="location" v-model="this.copyOfCabin.location">
+                  <option v-for="location in Cabin.locationList" :key="location">
+                    {{ location }}
+                  </option>
+                </select>
+              </div>
             </div>
-            <div class="mb-1">
-              <label class="form-label" for="description">Description</label>
-              <input class="form-control" id="description" type="text" v-model="selectedCabin.description"/>
+            <div class="row">
+              <div class="col">
+                <label class="form-label" for="description">Description</label>
+                <input class="form-control" id="description" type="text" v-model="this.copyOfCabin.description"/>
+              </div>
             </div>
           </form>
         </div>
@@ -57,7 +61,7 @@
       <div class="col btn-group">
         <button class="btn btn-secondary" @click="onSave" :disabled="hasChanged">Save</button>
         <button class="btn btn-secondary" @click="onReset" :disabled="hasChanged">Reset</button>
-        <button class="btn btn-secondary" @click="onClear" :disabled="hasChanged">Clear</button>
+        <button class="btn btn-secondary" @click="onClear">Clear</button>
         <button class="btn btn-secondary" @click="onCancel">Cancel</button>
         <button class="btn btn-danger" @click="onDelete" :disabled="!hasChanged">Delete</button>
       </div>
@@ -95,22 +99,22 @@ export default {
 
   created() {
     this.selectedCabin = this.$route.params.id ? this.findSelectedCabinFromRoute(this.$route.params.id) : null;
-    this.copyOfCabin = Cabin.copyConstructor(this.selectedCabin);
+    console.log(this.selectedCabin);
+    this.copyOfCabin = this.selectedCabin ? this.selectedCabin.copyConstructor(this.selectedCabin) : null;
   },
   methods: {
     onClear() {
-      this.selectedCabin = new Cabin();
+      this.copyOfCabin = new Cabin(this.copyOfCabin.id);
     },
     onReset() {
-      for (let key in this.selectedCabin) {
-        this.selectedCabin[key] = this.copyOfCabin[key];
-      }
+      this.copyOfCabin = this.selectedCabin.copyConstructor(this.selectedCabin);
     },
     onCancel() {
       this.onReset()
       this.$router.push("/cabins/overView34");
     },
     onSave() {
+      this.$emit("save", this.copyOfCabin);
       this.$router.push("/cabins/overView34");
     },
     onDelete() {
@@ -129,7 +133,7 @@ export default {
   watch: {
     "$route.params.id"(id) {
       this.selectedCabin = this.findSelectedCabinFromRoute(id);
-      this.copyOfCabin = Cabin.copyConstructor(this.selectedCabin);
+      this.copyOfCabin = this.selectedCabin ? this.selectedCabin.copyConstructor(this.selectedCabin) : null;
     },
   },
 };

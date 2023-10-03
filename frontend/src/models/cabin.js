@@ -23,11 +23,8 @@ export class Cabin{
         return null
     }
 
-    static copyConstructor(cabin) {
-        if (cabin == null) return null;
-        // Remove the line below that tries to deep clone the 'location' property
-        // copy.location = Location.copyConstructor(cabin.location);
-        return Object.assign(new Cabin(cabin.id), cabin);
+    copyConstructor() {
+        return Object.assign(new Cabin(), this);
     }
 
     // All needed lists

@@ -26,7 +26,7 @@
       </div>
     </div>
     <div class="row">
-      <router-view :cabins="cabins" @delete="onDelete"/>
+      <router-view :cabins="cabins" @delete="onDelete" @save="onSave"/>
     </div>
   </div>
 </template>
@@ -86,6 +86,14 @@ export default {
       if (index > -1) {
         this.cabins.splice(index, 1)
         this.selectedCabin = null
+      }
+    },
+    onSave(cabin) {
+      console.log(cabin);
+      let index = this.cabins.indexOf(this.selectedCabin);
+      console.log("Index" + index);
+      if (index > -1) {
+         this.cabins[index] = cabin;
       }
     },
     findSelectedCabinFromRoute($route) {
