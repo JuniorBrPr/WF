@@ -1,24 +1,24 @@
 <template>
-  <nav class="navbar navbar-expand-md bg-body py-3">
+  <nav class="navbar navbar-expand-md bg-body ">
     <div class="container">
       <ul class="navbar-nav me-auto">
         <li class="nav-item ">
-          <router-link class="nav-link m-1 item" :class="{ active: isActive }" to="/"><h2>Home</h2></router-link>
+          <router-link class="nav-link m-1 item" :class="{ active: isActive }" to="/"><h3>Home</h3></router-link>
         </li>
         <li class="nav-item">
           <a class="nav-link m-1 item disabled" href="#">
-            <h2 class="">My account</h2>
+            <h3 class="">My account</h3>
           </a>
         </li>
         <li class="nav-item">
           <a class="nav-link m-1 item disabled" href="#">
-            <h2>My Bookings</h2>
+            <h3>My Bookings</h3>
           </a>
         </li>
         <li class="nav-item dropdown" >
           <div class="nav-link item cursor-pointer" :class="{active: this.cabinsActive}"
                data-bs-toggle="dropdown" aria-expanded="false">
-            <h2 class="pe-auto dropdown-toggle">Cabins </h2>
+            <h3 class="pe-auto">Cabins </h3>
           </div>
           <div class="dropdown-menu" @focusout="this.hideDropdown">
             <router-link class="nav-link dropdown-item" :class="{ active: isActive }" to="/cabins/overView31">

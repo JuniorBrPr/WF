@@ -19,28 +19,27 @@ export default {
 </script>
 
 <template>
-  <div class="navbar navbar-expand bg-success">
-    <div>
-      <img class="logo m-2" src="../assets/summer.png" alt="logo">
-    </div>
-    <div class="flex-grow-1 m-2">
-      <div>
-        <h1 class="text-center">Play Aan Zee</h1>
-      </div>
-      <div class="d-flex justify-content-between">
-        <h6 class="text-start">Today is <br/>{{ getCurrentDate }}</h6>
-        <h6 class="text-end">Chill out and feel good</h6>
+  <div class="bg-success row justify-content-between m-0">
+    <div class="col">
+      <div class="row">
+        <img class="img-fluid" src="../assets/summer.png" alt="logo">
       </div>
     </div>
-    <div>
-      <img class="logo m-2" src="../assets/sailing-boat.png" alt="logo">
+    <div class="col col-10">
+      <div class="row">
+        <h3 class="text-center">Play Aan Zee</h3>
+        <h6 class="text-start">Today is {{ getCurrentDate }}
+          <div class="text-end">Chill out and feel good</div>
+        </h6>
+      </div>
+    </div>
+    <div class="col align-self-end">
+      <div class="row p-2 justify-content-end ">
+        <img class="img-fluid align-self-end" src="../assets/sailing-boat.png" alt="logo">
+      </div>
     </div>
   </div>
 </template>
 
 <style scoped>
-.logo {
-  width: 75px;
-  height: 75px;
-}
 </style>

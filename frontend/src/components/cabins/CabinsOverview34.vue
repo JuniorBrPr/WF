@@ -1,21 +1,27 @@
 <template>
-  <div class="container-fluid text-center mt-2">
-    <div class="row flex-nowrap list-group list-group-horizontal position-relative overflow-auto">
-      <div class="card list-group-item m-2" v-for="cabin in cabins"
-           :key="cabin.id"
-           @click="selectCabin(cabin)"
-           :class="{ 'border-success': selectedCabin === cabin }">
-        <img class="card-img-top rounded mx-auto d-block" :src="cabin.getImage()" alt="Card image cap">
-        <div class="card-body">
-          <h6 class="card-title">Cabin {{ cabin.id }}</h6>
-          <p class="card-info t"><strong>Type:</strong> {{ cabin.type }}<br><strong>Location:</strong> {{ cabin.location }}</p>
-        </div>
+  <div class="container-fluid px-5 text-center">
+    <div class="col">
+        <div class="row flex-nowrap overflow-auto py-1">
+          <div class="cabin border rounded-2 border-2 border-light-subtle  justify-content-center " v-for="cabin in cabins"
+               :key="cabin.id"
+               @click="selectCabin(cabin)"
+               :class="{ 'border-success': selectedCabin === cabin }">
+            <div class="row justify-content-center">
+              <img class="card-img rounded" :src="cabin.getImage()" alt="Card image cap">
+            </div>
+            <div class="mt-1">
+              <h6 class="fw-medium">Cabin {{ cabin.id }}</h6>
+              <p class="fw-light" ><strong>Type:</strong> {{ cabin.type }}<br><strong>Location:</strong> {{ cabin.location }}</p>
+            </div>
+          </div>
       </div>
-    </div>
-    <button class="btn btn-primary" @click="onNewCabin()">
-      New Cabin
-    </button>
-    <router-view :cabins="cabins" @delete="onDelete"/>
+      <div class="row">
+        <button class="btn btn-primary" @click="onNewCabin()">
+          New Cabin
+        </button>
+        <router-view :cabins="cabins" @delete="onDelete"/>
+      </div>
+   </div>
   </div>
 </template>
 
@@ -85,7 +91,17 @@ export default {
 </script>
 
 <style scoped>
-.card {
-  width: 150px;
+.card-img {
+  width: 65%;
+  height: 65%;
+}
+
+.cabin {
+  width: 200px;
+  height: 220px;
+}
+
+.container-fluid {
+  max-height: 90%;
 }
 </style>
