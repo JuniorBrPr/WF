@@ -1,13 +1,13 @@
 <template>
-  <div class="col px-5 text-center">
-    <div class="row">
+  <div class="col px-5 text-center border border-2 border-light-subtle rounded-4 mx-2">
+    <div class="row pt-1">
       <div class="col col-auto align-self-center">
         <button class="btn btn-lg btn-success" @click="onNewCabin()">
           New Cabin
         </button>
       </div>
       <div class="col col-10">
-        <div class="row flex-nowrap overflow-auto p-2">
+        <div class="row flex-nowrap overflow-auto p-2 border border-2 border-light-subtle rounded-4" ref="scrollPanel">
           <div class="cabin col col-2 border border-secondary-subtle rounded-2 justify-content-center mx-1 "
                v-for="cabin in cabins" :key="cabin.id" @click="selectCabin(cabin)"
                :class="{active:selectedCabin === cabin}">
@@ -18,7 +18,7 @@
               <h6 class="fw-medium">Cabin {{ cabin.id }}</h6>
               <p class="fw-light">
                 <strong>Type:</strong> {{ cabin.type }}
-                <br><strong>Location:</strong> {{cabin.location }}
+                <br><strong>Location:</strong> {{ cabin.location }}
               </p>
             </div>
           </div>
@@ -74,12 +74,12 @@ export default {
     onNewCabin() {
       this.lastId = this.lastId + Math.floor(Math.random() * 3) + 1
       let newCabin = Cabin.createSampleCabin(this.lastId)
-
-      this.cabins.push(
-          newCabin
-      )
+      this.cabins.push(newCabin)
       this.selectedCabin = newCabin
       this.$router.push("/cabins/overView34/" + this.lastId);
+      this.$nextTick(() => {
+        this.$refs.scrollPanel.scrollLeft = this.$refs.scrollPanel.scrollWidth;
+      })
     },
     onDelete() {
       let index = this.cabins.indexOf(this.selectedCabin);
@@ -93,7 +93,7 @@ export default {
       let index = this.cabins.indexOf(this.selectedCabin);
       console.log("Index" + index);
       if (index > -1) {
-         this.cabins[index] = cabin;
+        this.cabins[index] = cabin;
       }
     },
     findSelectedCabinFromRoute($route) {

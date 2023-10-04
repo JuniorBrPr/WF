@@ -1,8 +1,8 @@
 <template>
-  <div v-if="this.copyOfCabin" class="row detail">
-    <div class="row">
-      <div class="col col-4 p5">
-        <img class="img-fluid p-5" alt="Cabin image" :src="this.copyOfCabin.getImage()"/>
+  <div v-if="this.copyOfCabin" class="row detail justify-content-center  p-0 px-3 mt-1">
+<!--    <div class="row ">-->
+      <div class="col col-3 col-auto align-self-center">
+        <img class="img-fluid" alt="Cabin image" :src="this.copyOfCabin.getImage()"/>
       </div>
       <div class="col-md-6 col-xl-8">
         <div>
@@ -56,15 +56,15 @@
           </form>
         </div>
       </div>
-    </div>
-    <div class="row p-2">
-      <div class="col btn-group">
-        <button class="btn btn-secondary" @click="onSave" :disabled="hasChanged">Save</button>
-        <button class="btn btn-secondary" @click="onReset" :disabled="hasChanged">Reset</button>
-        <button class="btn btn-secondary" @click="onClear">Clear</button>
-        <button class="btn btn-secondary" @click="onCancel">Cancel</button>
-        <button class="btn btn-danger" @click="onDelete" :disabled="!hasChanged">Delete</button>
-      </div>
+      <div class="row p-2 m-0">
+        <div class="col btn-group">
+          <button class="btn btn-secondary" @click="onSave" :disabled="hasChanged">Save</button>
+          <button class="btn btn-secondary" @click="onReset" :disabled="hasChanged">Reset</button>
+          <button class="btn btn-secondary" @click="onClear">Clear</button>
+          <button class="btn btn-secondary" @click="onCancel">Cancel</button>
+          <button class="btn btn-danger" @click="onDelete" :disabled="!hasChanged">Delete</button>
+        </div>
+<!--      </div>-->
     </div>
   </div>
   <div v-else class="container">

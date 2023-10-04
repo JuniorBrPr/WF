@@ -17,10 +17,8 @@ export class Cabin{
     }
 
     getImage() {
-        if(this.image != null){
-            return require('@/assets/' + this.image + '.png');
-        }
-        return null
+        let filename = this.image != null ? this.image : 'default';
+        return require('@/assets/' + filename + '.png');
     }
 
     copyConstructor() {
