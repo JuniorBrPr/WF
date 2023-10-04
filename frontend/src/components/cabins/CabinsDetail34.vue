@@ -17,7 +17,6 @@
         </div>
       </div>
     </div>
-
     <div class="col col-3 col-auto align-self-center">
       <img class="img-fluid" alt="Cabin image" :src="this.copyOfCabin.getImage()"/>
     </div>
@@ -75,22 +74,27 @@
     </div>
     <div class="row p-2 m-0">
       <div class="col btn-group">
-        <button class="btn btn-secondary" @click="onSave" :disabled="!hasChanged">Save</button>
-        <button class="btn btn-secondary"
-                @click="confirm(onReset, true,
-                    'Reset','discard unsaved changes in')" :disabled="!hasChanged">
+        <button class="btn btn-outline-success fs-5 fw-bold" @click="onSave" :disabled="!hasChanged"
+                :class="{'bg-success-subtle': hasChanged}">
+          Save
+        </button>
+        <button class="btn btn-outline-primary fs-5 fw-bold" :class="{'bg-primary-subtle': hasChanged}"
+                @click="confirm(onReset, true,'Reset','discard unsaved changes in')"
+                :disabled="!hasChanged">
           Reset
         </button>
-        <button class="btn btn-secondary"
-                @click="confirm(onClear,true,
-                    'Clear','discard unsaved changes in')">
+        <button class="btn btn-outline-primary bg-primary-subtle fs-5 fw-bold"
+                @click="confirm(onClear,true,'Clear','discard unsaved changes in')">
           Clear
         </button>
-        <button class="btn btn-secondary" @click="confirm(onCancel, true,
-                    'Cancel','discard unsaved changes in')">Cancel
+        <button class="btn btn-outline-primary bg-primary-subtle fs-5 fw-bold"
+                @click="confirm(onCancel, true,'Cancel','discard unsaved changes in')">
+          Cancel
         </button>
-        <button class="btn btn-danger" @click="confirm(onDelete, false,
-        'Delete','delete')" :disabled="hasChanged">
+        <button class="btn btn-outline-danger fs-5 fw-bold"
+                :class="{'bg-danger-subtle': !hasChanged}"
+                @click="confirm(onDelete, false,'Delete','delete')"
+                :disabled="hasChanged">
           Delete
         </button>
       </div>
@@ -111,43 +115,35 @@ export default {
     Cabin() {
       return Cabin;
     },
+    selectedCabin() {
+      return this.findSelectedCabinFromRoute();
+    },
     hasChanged() {
-      if (this.selectedCabin === null || this.copyOfCabin === null) {
-        return false;
-      }
-      const changed = !Cabin.equals(this.selectedCabin, this.copyOfCabin);
-      if (changed) {
-        this.$emit("changed", changed);
-      }
-      return changed;
+      return !Cabin.equals(this.selectedCabin, this.copyOfCabin);
     }
   },
   props: {
-    cabins: Array,
-    ch
+    cabins: Array
   },
   data() {
     return {
-      selectedCabin: null,
       copyOfCabin: null,
     };
   },
-  beforeRouteLeave(to, from, next) {
-    this.hasChanged ? this.beforeUnload(next) : next;
-  },
-  beforeUpdate(to, from, next) {
-    if (to !== from) {
-      this.hasChanged ? this.beforeUnload(next) : next;
+  beforeRouteUpdate(to, from, next) {
+    if (this.selectedCabin === null) {
+      return;
     }
+    if (this.hasChanged) {
+      this.beforeUnload(to, from, next)
+      return;
+    }
+    next();
   },
-  // mounted(to, from, next) {
-  //   this.hasChanged ? this.beforeUnload(next) : next;
-  // },
-  // beforeUnmount( to, from, next) {
-  //   this.hasChanged ? this.beforeUnload(next) : next;
-  // },
+  beforeRouteLeave(to, from, next) {
+    this.beforeUnload(to, from, next)
+  },
   created() {
-    this.selectedCabin = this.$route.params.id ? this.findSelectedCabinFromRoute(this.$route.params.id) : null;
     this.copyOfCabin = this.selectedCabin ? this.selectedCabin.copyConstructor(this.selectedCabin) : null;
   },
   methods: {
@@ -159,33 +155,18 @@ export default {
     },
     onCancel() {
       this.onReset()
-      this.selectedCabin = null;
-      this.copyOfCabin = null;
       this.$router.push("/cabins/overView34");
     },
     onSave() {
       this.$emit("save", this.copyOfCabin);
-      this.selectedCabin = null;
-      this.copyOfCabin = null;
-      this.$router.push("/cabins/overView34");
     },
     onDelete() {
       this.$emit("delete", this.selectedCabin);
-      this.selectedCabin = null;
-      this.copyOfCabin = null;
       this.$router.push("/cabins/overView34");
-    },
-    beforeUnload() {
-      if (!this.hasChanged) {
-        return;
-      }
-      this.confirm(() => {}, true, 'Leaving page with unsaved changes',
-          'discard unsaved changes in');
     },
     confirm(method, needsChanges, title, message) {
       if (needsChanges && !this.hasChanged) {
         method();
-        this.hasChanged = false;
         return;
       }
       const modal = new Modal(this.$refs.modal);
@@ -202,18 +183,31 @@ export default {
         })
       }
     },
-    findSelectedCabinFromRoute(id) {
+    findSelectedCabinFromRoute() {
       for (let i = 0; i < this.cabins.length; i++) {
-        if (this.cabins[i].id === parseInt(id)) {
+        if (this.cabins[i].id === parseInt(this.$route.params.id)) {
           return this.cabins[i];
         }
       }
       return null;
     },
-  },
+    beforeUnload(to, from, next) {
+      if (!this.selectedCabin || !this.copyOfCabin || !this.hasChanged) {
+        next();
+        return;
+      }
+
+      this.confirm(
+          () => {
+            next();
+          },
+          true,
+          'Discarding unsaved changes', 'discard unsaved changes in')
+    }
+  }
+  ,
   watch: {
-    "$route.params.id"(id) {
-      this.selectedCabin = this.findSelectedCabinFromRoute(id);
+    "$route.params.id"() {
       this.copyOfCabin = this.selectedCabin ? this.selectedCabin.copyConstructor(this.selectedCabin) : null;
     },
   },

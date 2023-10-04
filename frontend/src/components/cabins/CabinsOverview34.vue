@@ -9,8 +9,9 @@
       <div class="col col-10">
         <div class="row flex-nowrap overflow-auto p-2 border border-2 border-light-subtle rounded-4" ref="scrollPanel">
           <div class="cabin col col-2 border border-secondary-subtle rounded-2 justify-content-center mx-1 "
+               type="button"
                v-for="cabin in cabins" :key="cabin.id" @click="selectCabin(cabin)"
-               :class="{active:selectedCabin === cabin}">
+               :class="{active:this.findSelectedCabinFromRoute() === cabin}">
             <div class="row justify-content-center">
               <img class="card-img rounded" :src="cabin.getImage()" alt="Card image cap">
             </div>
@@ -26,7 +27,7 @@
       </div>
     </div>
     <div class="row">
-      <router-view :cabins="cabins" :confirmationNeeded="" @delete="onDelete" @save="onSave" @change="onChange"/>
+      <router-view :cabins="cabins" @delete="onDelete" @save="onSave"/>
     </div>
   </div>
 </template>
@@ -39,16 +40,14 @@ export default {
   computed: {
     Cabin() {
       return Cabin
-    }
+    },
   },
   components: {},
   data() {
     return {
       cabins: [],
       lastId: 10000,
-      selectedCabin: null,
-      isActive: true,
-      hasChanged: false,
+      isActive: true
     }
   },
 
@@ -59,59 +58,45 @@ export default {
           Cabin.createSampleCabin(this.lastId)
       )
     }
-    this.selectedCabin = this.findSelectedCabinFromRoute(this.$route);
   },
-
   methods: {
     selectCabin(cabin) {
-      if (this.selectedCabin !== cabin) {
-        this.selectedCabin = cabin;
-        if (this.hasChanged) {
-
-        }
-        this.$router.push(this.$route.matched[1].path + '/' + cabin.id);
+      if (this.findSelectedCabinFromRoute() !== cabin) {
+        this.$router.push("/cabins/overView34/" + cabin.id);
       } else {
-        this.selectedCabin = null;
-        this.$router.push(this.$route.matched[1].path);
+        this.$router.push("/cabins/overView34/");
       }
     },
     onNewCabin() {
       this.lastId = this.lastId + Math.floor(Math.random() * 3) + 1
       let newCabin = Cabin.createSampleCabin(this.lastId)
       this.cabins.push(newCabin)
-      this.selectedCabin = newCabin
       this.$router.push("/cabins/overView34/" + this.lastId);
       this.$nextTick(() => {
         this.$refs.scrollPanel.scrollLeft = this.$refs.scrollPanel.scrollWidth;
       })
     },
     onDelete() {
-      let index = this.cabins.indexOf(this.selectedCabin);
+      let index = this.cabins.indexOf(this.findSelectedCabinFromRoute());
       if (index > -1) {
         this.cabins.splice(index, 1)
-        this.selectedCabin = null
       }
     },
     onSave(cabin) {
-      console.log(cabin);
-      let index = this.cabins.indexOf(this.selectedCabin);
-      console.log("Index" + index);
+      let index = this.cabins.indexOf(this.findSelectedCabinFromRoute());
       if (index > -1) {
         this.cabins[index] = cabin;
       }
     },
-    findSelectedCabinFromRoute($route) {
-      let cabinId = $route.params.id;
+    findSelectedCabinFromRoute() {
+      let cabinId = this.$route.params.id;
       for (let i = 0; i < this.cabins.length; i++) {
         if (this.cabins[i].id === parseInt(cabinId)) {
-          console.log(cabinId);
           return this.cabins[i];
         }
       }
+      this.$router.push("/cabins/overView34/");
       return null;
-    },
-    onChange(changed) {
-      this.hasChanged = changed;
     }
   }
 }
