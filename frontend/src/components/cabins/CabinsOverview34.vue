@@ -26,7 +26,7 @@
       </div>
     </div>
     <div class="row">
-      <router-view :cabins="cabins" @delete="onDelete" @save="onSave"/>
+      <router-view :cabins="cabins" :confirmationNeeded="" @delete="onDelete" @save="onSave" @change="onChange"/>
     </div>
   </div>
 </template>
@@ -48,6 +48,7 @@ export default {
       lastId: 10000,
       selectedCabin: null,
       isActive: true,
+      hasChanged: false,
     }
   },
 
@@ -65,6 +66,9 @@ export default {
     selectCabin(cabin) {
       if (this.selectedCabin !== cabin) {
         this.selectedCabin = cabin;
+        if (this.hasChanged) {
+
+        }
         this.$router.push(this.$route.matched[1].path + '/' + cabin.id);
       } else {
         this.selectedCabin = null;
@@ -105,6 +109,9 @@ export default {
         }
       }
       return null;
+    },
+    onChange(changed) {
+      this.hasChanged = changed;
     }
   }
 }

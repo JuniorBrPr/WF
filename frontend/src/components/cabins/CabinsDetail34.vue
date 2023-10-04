@@ -115,25 +115,31 @@ export default {
       if (this.selectedCabin === null || this.copyOfCabin === null) {
         return false;
       }
-      return !Cabin.equals(this.selectedCabin, this.copyOfCabin);
+      const changed = !Cabin.equals(this.selectedCabin, this.copyOfCabin);
+      if (changed) {
+        this.$emit("changed", changed);
+      }
+      return changed;
     }
   },
-  props: ["cabins"],
-
+  props: {
+    cabins: Array,
+    ch
+  },
   data() {
     return {
       selectedCabin: null,
       copyOfCabin: null,
     };
   },
-  // beforeRouteLeave(to, from, next) {
-  //   this.hasChanged ? this.beforeUnload(next) : next;
-  // },
-  // beforeUpdate(to, from, next) {
-  //   if (to !== from) {
-  //     this.hasChanged ? this.beforeUnload(next) : next;
-  //   }
-  // },
+  beforeRouteLeave(to, from, next) {
+    this.hasChanged ? this.beforeUnload(next) : next;
+  },
+  beforeUpdate(to, from, next) {
+    if (to !== from) {
+      this.hasChanged ? this.beforeUnload(next) : next;
+    }
+  },
   // mounted(to, from, next) {
   //   this.hasChanged ? this.beforeUnload(next) : next;
   // },
