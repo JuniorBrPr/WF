@@ -21,7 +21,7 @@
           <li class="nav-item dropdown">
             <div class="nav-link item cursor-pointer" :class="{active: this.cabinsActive}"
                  data-bs-toggle="dropdown" aria-expanded="false">
-              <h3 class="pe-auto">Cabins </h3>
+              <h3 class="pe-auto dropdown-toggle">Cabins </h3>
             </div>
             <div class="dropdown-menu">
               <router-link class="nav-link dropdown-item" :class="{ active: isActive }" to="/cabins/overView31">

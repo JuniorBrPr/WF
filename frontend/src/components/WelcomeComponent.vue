@@ -5,65 +5,61 @@ export default {
 </script>
 
 <template>
-  <div class="d-flex">
-    <aside>
-      <div>
-        <h4>Pick a date</h4><input type="date"/>
+  <div class="row border border-2 border-light-subtle rounded-4 mx-2">
+    <div class="col-md-2 border border-2 border-light-subtle rounded-4">
+      <div class="row">
+        <label for="date" class="form-label h4 text-center">Pick a date</label>
+        <input type="date" id="date" class="form-control"/>
       </div>
-      <div>
+      <div class="row mt-2">
         <h4>Pick a location:</h4>
-        <ul>
-          <li>Egmond Aan Zee</li>
-          <li>Zandvoort</li>
-          <li>Brugge</li>
-          <li>Zeeland</li>
+        <ul class="col list-group">
+          <li class="list-group-item" role="button">Egmond Aan Zee</li>
+          <li class="list-group-item" role="button">Zandvoort</li>
+          <li class="list-group-item" role="button">Brugge</li>
+          <li class="list-group-item" role="button">Zeeland</li>
         </ul>
       </div>
-    </aside>
-    <main>
-      <div>
-        <h3 class="text-start">Photo Gallery:</h3>
+    </div>
+    <main class="col-md-6 col-xl-8">
+      <div class="row">
+        <h3 class="text-center">Photo Gallery:</h3>
       </div>
-      <div>
-        <img class="m-1 image" src="../assets/h1.png"/>
-        <img class="m-1 image" src="../assets/h2.png"/>
-        <img class="m-1 image" src="../assets/h.png"/>
-        <img class="m-1 image" src="../assets/h1.png"/>
-        <img class="m-1 image" src="../assets/h.png"/>
-        <img class="m-1 image" src="../assets/h1.png"/>
-        <img class="m-1 image" src="../assets/h2.png"/>
-        <img class="m-1 image" src="../assets/h3.png"/>
-        <img class="m-1 image" src="../assets/h2.png"/>
-        <img class="m-1 image" src="../assets/h3.png"/>
-        <img class="m-1 image" src="../assets/h.png"/>
-        <img class="m-1 image" src="../assets/h3.png"/>
+      <div class="row justify-content-center">
+        <img class="m-1 img-fluid" src="../assets/h1.png"/>
+        <img class="m-1 img-fluid" src="../assets/h2.png"/>
+        <img class="m-1 img-fluid" src="../assets/h.png"/>
+        <img class="m-1 img-fluid" src="../assets/h1.png"/>
+        <img class="m-1 img-fluid" src="../assets/h.png"/>
+        <img class="m-1 img-fluid" src="../assets/h1.png"/>
+        <img class="m-1 img-fluid" src="../assets/h2.png"/>
+        <img class="m-1 img-fluid" src="../assets/h3.png"/>
+        <img class="m-1 img-fluid" src="../assets/h2.png"/>
+        <img class="m-1 img-fluid" src="../assets/h3.png"/>
+        <img class="m-1 img-fluid" src="../assets/h.png"/>
+        <img class="m-1 img-fluid" src="../assets/h3.png"/>
       </div>
     </main>
-    <aside>
-      <h4>Beach activities</h4>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec tellus tortor, tincidunt at eleifend at,
+    <div class="col-md-2 border border-2 border-light-subtle rounded-4">
+      <h4 class="mt-2">Beach activities</h4>
+      <p class="mt-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec tellus tortor, tincidunt at eleifend at,
         sollicitudin vitae nulla. Nunc a posuere erat. Sed rutrum, purus at dapibus mattis, est purus sagittis augue,
         eget aliquet leo velit sed nibh. Maecenas sodales mi erat. Nunc consectetur, ipsum a ullamcorper commodo, quam
         orci viverra erat, id cursus mi massa vel neque. Morbi placerat ut mauris in volutpat. Aenean efficitur sagittis
         diam, ac ultrices diam tincidunt eu. Nulla et semper nisl.
       </p>
-    </aside>
+    </div>
   </div>
 </template>
 
 <style scoped>
-aside {
-  width: 30%;
-  background-color: #f0f0f0;
-  padding: 10px;
+.img-fluid {
+  max-width: 200px;
 }
 
-.image {
-  width: 250px;
-  height: 200px;
-}
-
-.image:hover {
-  transform: scale(0.9);
+.img-fluid:hover, .list-group-item:hover{
+  transform: scale(0.95);
+  background: lightgreen;
+  border-radius: 5px;
 }
 </style>
