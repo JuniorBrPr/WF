@@ -1,9 +1,9 @@
 package app.models;
 
 
+import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,9 +14,33 @@ import java.util.Random;
 @Entity
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
 public class Cabin {
+    @JsonView(Views.Summary.class)
+    @Id
+    private int id;
+    @JsonView(Views.Summary.class)
+    private Type type;
+    @JsonView(Views.Summary.class)
+    private int numAvailable;
+    @JsonView(Views.Summary.class)
+    private String description;
+    private String location;
+    private float pricePerWeek;
+    private int image;
+
+    public enum Type {
+        SmallDayTime,
+        SmallLodge,
+        LargeLodge,
+        FamilyLodge
+    }
+
+    static public int generateId(int bound, int offset) {
+        Random random = new Random();
+        return random.nextInt(bound) + offset;
+    }
+
     static private List<String> locations = List.of(
             "Coral Cove",
             "Sandy Shores",
@@ -41,19 +65,11 @@ public class Cabin {
             "Blissful surroundings along the coast with a calming ambiance.",
             "A cove kissed by the warm rays of the sun."
     );
-    @Id
-    private Long id;
-    private int image;
-    private Type type;
-    private float pricePerWeek;
-    private String location;
-    private String description;
-    private int numAvailable;
 
     static public Cabin generateRandomCabin(int i) {
         Cabin cabin = new Cabin();
         Random random = new Random();
-        cabin.setId((long) i + 3000);
+        cabin.setId(i + 3000);
         cabin.setImage(random.nextInt(4));
         cabin.setType(Type.values()[random.nextInt(Type.values().length)]);
         cabin.setPricePerWeek(1000 + i * 100);
@@ -61,12 +77,5 @@ public class Cabin {
         cabin.setDescription(descriptions.get(random.nextInt(descriptions.size())));
         cabin.setNumAvailable(random.nextInt(10));
         return cabin;
-    }
-
-    public enum Type {
-        SmallDayTime,
-        SmallLodge,
-        LargeLodge,
-        FamilyLodge
     }
 }
