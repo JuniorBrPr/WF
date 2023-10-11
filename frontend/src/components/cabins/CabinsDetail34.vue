@@ -107,7 +107,6 @@
 
 <script>
 import {Cabin} from "@/models/cabin";
-import Modal from "bootstrap/js/dist/modal";
 
 export default {
   name: "cabinsDetail34",
@@ -131,17 +130,16 @@ export default {
     };
   },
   beforeRouteUpdate(to, from, next) {
-    if (this.selectedCabin === null) {
-      return;
-    }
-    if (this.hasChanged) {
-      this.beforeUnload(to, from, next)
-      return;
-    }
-    next();
+    this.beforeUnload(null, next);
   },
   beforeRouteLeave(to, from, next) {
-    this.beforeUnload(to, from, next)
+    this.beforeUnload(null, next);
+  },
+  mounted() {
+    window.addEventListener('beforeunload', this.beforeUnload);
+  },
+  beforeUnmount() {
+    window.removeEventListener('beforeunload', this.beforeUnload);
   },
   created() {
     this.copyOfCabin = this.selectedCabin ? this.selectedCabin.copyConstructor(this.selectedCabin) : null;
@@ -169,19 +167,19 @@ export default {
         method();
         return;
       }
-      const modal = new Modal(this.$refs.modal);
-      this.$refs.title.innerText = title;
-      this.$refs.modalMessage.innerText = 'Are you sure you want to ' + message + ' cabin: '
-          + this.selectedCabin.id + '?'
-      modal.show();
-      if (modal._isShown) {
-        this.$refs.modal.addEventListener('click', (event) => {
-          if (event.target.id === 'understood') {
-            method();
-            modal.hide();
-          }
-        })
+      if (confirm('Are you sure you want to ' + message + ' cabin: ' + this.selectedCabin.id + '?')) {
+        method();
       }
+    },
+    beforeUnload(event, next) {
+      this.confirm(() => {
+            if (next) next();
+            if (event){
+              event.preventDefault();
+              event.returnValue = '';
+            }
+          }, true,
+          'Discarding unsaved changes', 'discard unsaved changes in')
     },
     findSelectedCabinFromRoute() {
       for (let i = 0; i < this.cabins.length; i++) {
@@ -190,19 +188,6 @@ export default {
         }
       }
       return null;
-    },
-    beforeUnload(to, from, next) {
-      if (!this.selectedCabin || !this.copyOfCabin || !this.hasChanged) {
-        next();
-        return;
-      }
-
-      this.confirm(
-          () => {
-            next();
-          },
-          true,
-          'Discarding unsaved changes', 'discard unsaved changes in')
     }
   }
   ,

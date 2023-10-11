@@ -59,6 +59,12 @@ export default {
       )
     }
   },
+  mounted() {
+    window.addEventListener('beforeunload', this.beforeUnload);
+  },
+  beforeUnmount() {
+    window.removeEventListener('beforeunload', this.beforeUnload);
+  },
   methods: {
     selectCabin(cabin) {
       if (this.findSelectedCabinFromRoute() !== cabin) {
