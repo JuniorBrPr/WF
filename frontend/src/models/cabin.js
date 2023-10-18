@@ -25,6 +25,10 @@ export class Cabin{
         return Object.assign(new Cabin(), this);
     }
 
+    static copyConstructor(cabin) {
+        return Object.assign(new Cabin(), cabin);
+    }
+
     // All needed lists
     static typeList = [
         "SmallDayTime",
