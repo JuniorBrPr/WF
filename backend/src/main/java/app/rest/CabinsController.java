@@ -21,7 +21,7 @@ public class CabinsController {
         this.cabinsRepository = cabinsRepositoryMock;
     }
 
-    @GetMapping("/cabins/test")
+    @GetMapping("/cabins/all")
     public List<Cabin> getTestCabins() {
         return cabinsRepository.findAll();
     }

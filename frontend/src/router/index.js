@@ -1,4 +1,4 @@
-import { createRouter, createWebHashHistory } from 'vue-router';
+import {createRouter, createWebHashHistory} from 'vue-router';
 import welcomeComponent from "@/components/WelcomeComponent";
 import unknownRoute from "@/components/UnknownRoute";
 import cabinsOverview31 from "@/components/cabins/CabinsOverview31.vue";
@@ -7,6 +7,8 @@ import cabinsOverview33 from "@/components/cabins/CabinsOverview33.vue";
 import cabinsOverview34 from "@/components/cabins/CabinsOverview34.vue";
 import cabinsDetail32 from "@/components/cabins/CabinsDetail32.vue";
 import cabinsDetail34 from "@/components/cabins/CabinsDetail34.vue";
+import cabinsOverview37 from "@/components/cabins/CabinsOverview37.vue";
+import cabinsDetail37 from "@/components/cabins/CabinsDetail37.vue";
 
 const routes = [
     {
@@ -50,6 +52,17 @@ const routes = [
                     }
                 ]
             },
+            {
+                path: 'overView37',
+                name: 'overView37',
+                component: cabinsOverview37,
+                children: [
+                    {
+                        path: ':id',
+                        component: cabinsDetail37
+                    }
+                ]
+            }
         ]
     },
     {

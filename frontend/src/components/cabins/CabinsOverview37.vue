@@ -36,7 +36,8 @@
 import {Cabin} from '@/models/cabin.js';
 
 export default {
-  name: "cabinsOverview34",
+  name: "cabinsOverview37",
+  inject: ['cabinsService'],
   computed: {
     Cabin() {
       return Cabin
@@ -50,14 +51,8 @@ export default {
       isActive: true
     }
   },
-
-  created() {
-    for (let i = 0; i < 8; i++) {
-      this.lastId = this.lastId + Math.floor(Math.random() * 3) + 1
-      this.cabins.push(
-          Cabin.createSampleCabin(this.lastId)
-      )
-    }
+  async created() {
+    this.cabins = await this.cabinsService.asyncFindAll();
   },
   mounted() {
     window.addEventListener('beforeunload', this.beforeUnload);
@@ -68,16 +63,16 @@ export default {
   methods: {
     selectCabin(cabin) {
       if (this.findSelectedCabinFromRoute() !== cabin) {
-        this.$router.push("/cabins/overView34/" + cabin.id);
+        this.$router.push("/cabins/overView37/" + cabin.id);
       } else {
-        this.$router.push("/cabins/overView34/");
+        this.$router.push("/cabins/overView37/");
       }
     },
     onNewCabin() {
       this.lastId = this.lastId + Math.floor(Math.random() * 3) + 1
       let newCabin = Cabin.createSampleCabin(this.lastId)
       this.cabins.push(newCabin)
-      this.$router.push("/cabins/overView34/" + this.lastId);
+      this.$router.push("/cabins/overView37/" + this.lastId);
       this.$nextTick(() => {
         this.$refs.scrollPanel.scrollLeft = this.$refs.scrollPanel.scrollWidth;
       })
@@ -101,7 +96,7 @@ export default {
           return this.cabins[i];
         }
       }
-      this.$router.push("/cabins/overView34/");
+      this.$router.push("/cabins/overView37/");
       return null;
     }
   }

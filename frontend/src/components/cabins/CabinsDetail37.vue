@@ -109,7 +109,8 @@
 import {Cabin} from "@/models/cabin";
 
 export default {
-  name: "cabinsDetail34",
+  name: "cabinsDetail37",
+  inject: ['cabinsService'],
   computed: {
     Cabin() {
       return Cabin;
@@ -123,6 +124,9 @@ export default {
   },
   props: {
     cabins: Array
+  },
+  created() {
+    this.copyOfCabin = this.selectedCabin ? this.selectedCabin.copyConstructor(this.selectedCabin) : null;
   },
   data() {
     return {
@@ -141,9 +145,6 @@ export default {
   beforeUnmount() {
     window.removeEventListener('beforeunload', this.beforeUnload);
   },
-  created() {
-    this.copyOfCabin = this.selectedCabin ? this.selectedCabin.copyConstructor(this.selectedCabin) : null;
-  },
   methods: {
     onClear() {
       this.copyOfCabin = new Cabin(this.copyOfCabin.id);
@@ -153,14 +154,14 @@ export default {
     },
     onCancel() {
       this.onReset()
-      this.$router.push("/cabins/overView34");
+      this.$router.push("/cabins/overView37");
     },
     onSave() {
       this.$emit("save", this.copyOfCabin);
     },
     onDelete() {
       this.$emit("delete", this.selectedCabin);
-      this.$router.push("/cabins/overView34");
+      this.$router.push("/cabins/overView37");
     },
     confirm(method, needsChanges, title, message) {
       if (needsChanges && !this.hasChanged) {
@@ -174,7 +175,7 @@ export default {
     beforeUnload(event, next) {
       this.confirm(() => {
             if (next) next();
-            if (event){
+            if (event) {
               event.preventDefault();
               event.returnValue = '';
             }

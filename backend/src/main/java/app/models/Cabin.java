@@ -27,7 +27,7 @@ public class Cabin {
     private String description;
     private String location;
     private float pricePerWeek;
-    private int image;
+    private String image;
 
     public enum Type {
         SmallDayTime,
@@ -70,7 +70,8 @@ public class Cabin {
         Cabin cabin = new Cabin();
         Random random = new Random();
         cabin.setId(i + 3000);
-        cabin.setImage(random.nextInt(4));
+        int imageId = random.nextInt(4);
+        cabin.setImage("h" + (imageId == 0 ? "" : imageId));
         cabin.setType(Type.values()[random.nextInt(Type.values().length)]);
         cabin.setPricePerWeek(1000 + i * 100);
         cabin.setLocation(locations.get(random.nextInt(locations.size())));
