@@ -27,7 +27,7 @@ export class CabinsAdaptor {
     async asyncFindById(id) {
         console.log("CabinsAdaptor.findById() called");
         const cabin = await this.fetchJson(this.resourceUrl + id);
-        return Cabin.copyConstructor(await cabin);
+        return Cabin.copyConstructor(cabin);
     }
 
     async asyncSave(cabin) {

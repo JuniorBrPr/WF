@@ -14,6 +14,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
+@CrossOrigin("http://localhost:8080/")
 public class CabinsController {
     private final CabinsRepositoryMock cabinsRepository;
 

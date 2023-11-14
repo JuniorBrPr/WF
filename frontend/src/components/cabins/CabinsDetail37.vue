@@ -115,9 +115,6 @@ export default {
     Cabin() {
       return Cabin;
     },
-    selectedCabin() {
-      return this.findSelectedCabinFromRoute();
-    },
     hasChanged() {
       return !Cabin.equals(this.selectedCabin, this.copyOfCabin);
     }
@@ -125,12 +122,14 @@ export default {
   props: {
     cabins: Array
   },
-  created() {
-    this.copyOfCabin = this.selectedCabin ? this.selectedCabin.copyConstructor(this.selectedCabin) : null;
+  async created() {
+    this.selectedCabin = await this.findSelectedCabinFromRoute()
+    this.copyOfCabin = this.selectedCabin ? Cabin.copyConstructor(this.selectedCabin) : null;
   },
   data() {
     return {
       copyOfCabin: null,
+      selectedCabin: null,
     };
   },
   beforeRouteUpdate(to, from, next) {
@@ -139,7 +138,7 @@ export default {
   beforeRouteLeave(to, from, next) {
     this.beforeUnload(null, next);
   },
-  mounted() {
+  async mounted() {
     window.addEventListener('beforeunload', this.beforeUnload);
   },
   beforeUnmount() {
@@ -150,7 +149,7 @@ export default {
       this.copyOfCabin = new Cabin(this.copyOfCabin.id);
     },
     onReset() {
-      this.copyOfCabin = this.selectedCabin.copyConstructor(this.selectedCabin);
+      this.copyOfCabin = Cabin.copyConstructor(this.selectedCabin);
     },
     onCancel() {
       this.onReset()
@@ -168,8 +167,11 @@ export default {
         method();
         return;
       }
-      if (confirm('Are you sure you want to ' + message + ' cabin: ' + this.selectedCabin.id + '?')) {
-        method();
+      if(!this.selectedCabin){
+        return;
+      }
+        if (confirm('Are you sure you want to ' + message + ' cabin: ' + this.selectedCabin.id + '?')) {
+          method();
       }
     },
     beforeUnload(event, next) {
@@ -182,19 +184,21 @@ export default {
           }, true,
           'Discarding unsaved changes', 'discard unsaved changes in')
     },
-    findSelectedCabinFromRoute() {
-      for (let i = 0; i < this.cabins.length; i++) {
-        if (this.cabins[i].id === parseInt(this.$route.params.id)) {
-          return this.cabins[i];
-        }
+    async findSelectedCabinFromRoute() {
+      let cabinId = this.$route.params.id;
+      let cabin = null;
+      if(cabinId) {
+        cabin =  await this.cabinsService.asyncFindById(cabinId)
       }
-      return null;
+      this.selectedCabin = cabin;
+      return cabin;
     }
   }
   ,
   watch: {
-    "$route.params.id"() {
-      this.copyOfCabin = this.selectedCabin ? this.selectedCabin.copyConstructor(this.selectedCabin) : null;
+    async "$route.params.id"() {
+      this.selectedCabin = await this.findSelectedCabinFromRoute()
+      this.copyOfCabin = this.selectedCabin ? Cabin.copyConstructor(this.selectedCabin) : null;
     },
   },
 };
