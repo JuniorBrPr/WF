@@ -1,9 +1,7 @@
 package app.rest;
 
 import app.models.Cabin;
-import app.models.Views;
-import app.repositories.CabinsRepositoryMock;
-import com.fasterxml.jackson.annotation.JsonView;
+import app.repositories.CabinsRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,9 +14,9 @@ import java.util.List;
 @RestController
 @CrossOrigin("http://localhost:8080/")
 public class CabinsController {
-    private final CabinsRepositoryMock cabinsRepository;
+    private final CabinsRepository cabinsRepository;
 
-    public CabinsController(CabinsRepositoryMock cabinsRepositoryMock) {
+    public CabinsController(CabinsRepository cabinsRepositoryMock) {
         this.cabinsRepository = cabinsRepositoryMock;
     }
 
@@ -65,11 +63,11 @@ public class CabinsController {
         return ResponseEntity.status(HttpStatus.OK).body(cabinsRepository.save(cabin));
     }
 
-    @JsonView(Views.Summary.class)
-    @GetMapping("/cabins/summary")
-    public ResponseEntity<?> getCabinsSummary() {
-        return new ResponseEntity<>(cabinsRepository.findAll(), HttpStatus.OK);
-    }
+//    @JsonView(Views.Summary.class)
+//    @GetMapping("/cabins/summary")
+//    public ResponseEntity<?> getCabinsSummary() {
+//        return new ResponseEntity<>(cabinsRepository.findAll(), HttpStatus.OK);
+//    }
 
     @DeleteMapping("/cabins/{id}")
     public ResponseEntity<?> deleteCabin(@PathVariable int id) {
