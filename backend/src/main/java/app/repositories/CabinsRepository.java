@@ -5,7 +5,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-public interface CabinsRepository {
+public interface CabinsRepository<Cabin> {
     List<Cabin> findAll();
     Cabin findById(int id);
     Cabin save(Cabin cabin);

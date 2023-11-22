@@ -20,8 +20,9 @@ export class CabinsAdaptor {
 
     async asyncFindAll() {
         console.log("CabinsAdaptor.findAll() called");
-        const cabins = await this.fetchJson(this.resourceUrl + "all");
-        return cabins?.map(s => Cabin.copyConstructor(s));
+        console.log(this.resourceUrl)
+        const cabins = await this.fetchJson(this.resourceUrl);
+        return cabins?.map(Cabin.copyConstructor);
     }
 
     async asyncFindById(id) {
@@ -31,27 +32,32 @@ export class CabinsAdaptor {
     }
 
     async asyncSave(cabin) {
-        console.log("CabinsAdaptor.save() called");
-        const options = {
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify(cabin)
-        }
 
-        let response = await this.fetchJson(this.resourceUrl, options);
 
-        if (response.status === 409) {
-            options.method = "PUT";
-            response = await this.fetchJson(this.resourceUrl + cabin.id, options);
-        }
+        if (cabin.id === 0) {
+            const response = await this.fetchJson(this.resourceUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(cabin)
+            })
 
-        if (response.ok) {
-            return Cabin.copyConstructor(await response.json());
+            if (response && response.id) {
+                cabin.id = response.id
+            }
+            return cabin;
         } else {
-            console.log(response, !response.bodyUsed ? await response.text() : "");
-            return null;
-        }
+            return await this.fetchJson(`${this.resourceUrl}/${cabin.id}`, {
+            method: 'PUT',
+                headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(cabin)
+        })
     }
+
+}
 
     async asyncDeleteById(id) {
         console.log("CabinsAdaptor.deleteById() called");

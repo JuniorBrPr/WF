@@ -2,6 +2,8 @@ package app.rest;
 
 import app.models.Cabin;
 import app.repositories.CabinsRepository;
+import com.fasterxml.jackson.annotation.JsonView;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,20 +15,19 @@ import java.util.List;
 
 @RestController
 @CrossOrigin("http://localhost:8080/")
+@RequestMapping("/cabins/")
 public class CabinsController {
-    private final CabinsRepository cabinsRepository;
 
-    public CabinsController(CabinsRepository cabinsRepositoryMock) {
-        this.cabinsRepository = cabinsRepositoryMock;
-    }
+    @Autowired
+    CabinsRepository<Cabin> cabinsRepository;
 
-    @GetMapping("/cabins/all")
+    @GetMapping("")
     public List<Cabin> getTestCabins() {
         return cabinsRepository.findAll();
     }
 
-    @GetMapping("/cabins/{id}")
-    public ResponseEntity<?> getCabinById(@PathVariable int id) {
+    @GetMapping("{id}")
+    public ResponseEntity<Cabin> getCabinById(@PathVariable int id) {
         Cabin cabin = cabinsRepository.findById(id);
         if (cabin == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Cabin not found");
@@ -34,8 +35,8 @@ public class CabinsController {
         return ResponseEntity.status(HttpStatus.OK).body(cabin);
     }
 
-    @PostMapping("/cabins")
-    public ResponseEntity<?> addCabin(@RequestBody Cabin cabin) {
+    @PostMapping("")
+    public ResponseEntity<Cabin> addCabin(@RequestBody Cabin cabin) {
         if (cabin.getId() == 0) {
             do {
                 cabin.setId(Cabin.generateId(1000, 100));
@@ -52,8 +53,8 @@ public class CabinsController {
         return ResponseEntity.status(HttpStatus.CREATED).location(location).body(savedCabin);
     }
 
-    @PutMapping("/cabins/{id}")
-    public ResponseEntity<?> updateCabin(@PathVariable int id, @RequestBody Cabin cabin) {
+    @PutMapping("{id}")
+    public ResponseEntity<Cabin> updateCabin(@PathVariable int id, @RequestBody Cabin cabin) {
         if (id != cabin.getId()) {
             throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED, "Cabin id mismatch");
         }
@@ -69,8 +70,8 @@ public class CabinsController {
 //        return new ResponseEntity<>(cabinsRepository.findAll(), HttpStatus.OK);
 //    }
 
-    @DeleteMapping("/cabins/{id}")
-    public ResponseEntity<?> deleteCabin(@PathVariable int id) {
+    @DeleteMapping("{id}")
+    public ResponseEntity<Cabin> deleteCabin(@PathVariable int id) {
         Cabin cabin = cabinsRepository.deleteById(id);
         if (cabin != null) {
             return ResponseEntity.status(HttpStatus.OK).body(cabin);

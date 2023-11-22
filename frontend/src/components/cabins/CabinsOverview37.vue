@@ -68,11 +68,16 @@ export default {
         this.$router.push("/cabins/overView37/");
       }
     },
-    onNewCabin() {
-      this.lastId = this.lastId + Math.floor(Math.random() * 3) + 1
-      let newCabin = Cabin.createSampleCabin(this.lastId)
+    async onNewCabin() {
+      // this.lastId = this.lastId + Math.floor(Math.random() * 3) + 1
+
+      let newCabin = Cabin.createSampleCabin(0)
+      const savedCabin = await this.cabinsService.asyncSave(newCabin)
+      console.log(savedCabin)
+
       this.cabins.push(newCabin)
-      this.$router.push("/cabins/overView37/" + this.lastId);
+      this.$router.push(this.$route.matched[1].path + "/" + savedCabin.id);
+      console.log(this.$route.matched[1].path + "/" + savedCabin.id)
       this.$nextTick(() => {
         this.$refs.scrollPanel.scrollLeft = this.$refs.scrollPanel.scrollWidth;
       })

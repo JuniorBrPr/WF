@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class CabinsRepositoryMock implements CabinsRepository {
+public class CabinsRepositoryMock implements CabinsRepository<Cabin> {
     private final ArrayList<Cabin> cabins;
 
     CabinsRepositoryMock() {
