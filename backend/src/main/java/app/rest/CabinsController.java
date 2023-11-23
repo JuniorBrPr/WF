@@ -14,14 +14,13 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@CrossOrigin("http://localhost:8080/")
 @RequestMapping("/cabins/")
 public class CabinsController {
 
     @Autowired
     CabinsRepository<Cabin> cabinsRepository;
 
-    @GetMapping("")
+    @GetMapping(path = "", produces = "application/json")
     public List<Cabin> getTestCabins() {
         return cabinsRepository.findAll();
     }

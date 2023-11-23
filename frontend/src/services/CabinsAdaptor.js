@@ -48,7 +48,7 @@ export class CabinsAdaptor {
             }
             return cabin;
         } else {
-            return await this.fetchJson(`${this.resourceUrl}/${cabin.id}`, {
+            return await this.fetchJson(`${this.resourceUrl}${cabin.id}`, {
             method: 'PUT',
                 headers: {
                 'Content-Type': 'application/json'
@@ -69,7 +69,9 @@ export class CabinsAdaptor {
         if (response.ok) {
             return Cabin.copyConstructor(await response.json());
         } else {
-            console.log(response, !response.bodyUsed ? await response.text() : "");
+            if (response) {
+                return Object.assign(new Cabin(), response);
+            }
             return null;
         }
     }

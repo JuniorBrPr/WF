@@ -119,9 +119,6 @@ export default {
       return !Cabin.equals(this.selectedCabin, this.copyOfCabin);
     }
   },
-  props: {
-    cabins: Array
-  },
   async created() {
     this.selectedCabin = await this.findSelectedCabinFromRoute()
     this.copyOfCabin = this.selectedCabin ? Cabin.copyConstructor(this.selectedCabin) : null;
@@ -155,12 +152,14 @@ export default {
       this.onReset()
       this.$router.push("/cabins/overView37");
     },
-    onSave() {
-      this.$emit("save", this.copyOfCabin);
+    async onSave() {
+      await this.cabinsService.asyncSave(this.copyOfCabin)
+      this.$emit('cabinUpdate')
     },
-    onDelete() {
-      this.$emit("delete", this.selectedCabin);
+    async onDelete() {
+      await this.cabinsService.asyncDeleteById(this.copyOfCabin.id)
       this.$router.push("/cabins/overView37");
+      this.$emit('cabinDeleted')
     },
     confirm(method, needsChanges, title, message) {
       if (needsChanges && !this.hasChanged) {

@@ -27,7 +27,7 @@
       </div>
     </div>
     <div class="row">
-      <router-view :cabins="cabins" @delete="onDelete" @save="onSave"/>
+      <router-view :cabins="cabins" @cabinDeleted="refreshCabins" @cabinUpdate="refreshCabins"/>
     </div>
   </div>
 </template>
@@ -82,18 +82,6 @@ export default {
         this.$refs.scrollPanel.scrollLeft = this.$refs.scrollPanel.scrollWidth;
       })
     },
-    onDelete() {
-      let index = this.cabins.indexOf(this.findSelectedCabinFromRoute());
-      if (index > -1) {
-        this.cabins.splice(index, 1)
-      }
-    },
-    onSave(cabin) {
-      let index = this.cabins.indexOf(this.findSelectedCabinFromRoute());
-      if (index > -1) {
-        this.cabins[index] = cabin;
-      }
-    },
     findSelectedCabinFromRoute() {
       let cabinId = this.$route.params.id;
       for (let i = 0; i < this.cabins.length; i++) {
@@ -103,6 +91,9 @@ export default {
       }
       this.$router.push("/cabins/overView37/");
       return null;
+    },
+    async refreshCabins() {
+      this.cabins = await this.cabinsService.asyncFindAll()
     }
   }
 }
