@@ -4,6 +4,7 @@ package app.models;
 import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -78,5 +79,22 @@ public class Cabin {
         cabin.setDescription(descriptions.get(random.nextInt(descriptions.size())));
         cabin.setNumAvailable(random.nextInt(10));
         return cabin;
+    }
+
+    @OneToMany(mappedBy = "cabin")
+    private List<Rentals> rentals;
+
+    public void addRental(Rentals rental) {
+        rentals.add(rental);
+        if (rental.getCabin() != this) {
+            rental.setCabin(this);
+        }
+    }
+
+    public void removeRental(Rentals rental) {
+        rentals.remove(rental);
+        if (rental.getCabin() == this) {
+            rental.setCabin(null);
+        }
     }
 }
