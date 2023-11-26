@@ -2,7 +2,9 @@ package app.repositories;
 
 import app.models.Cabin;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.TypedQuery;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,12 +20,24 @@ public class CabinsRepositoryJpa implements CabinsRepository<Cabin> {
 
     @Override
     public List<Cabin> findAll() {
-        return null;
+        TypedQuery<Cabin> query = entityManager.createQuery(
+                "SELECT c FROM Cabin c", Cabin.class
+        );
+        return query.getResultList();
     }
 
     @Override
     public Cabin findById(int id) {
-        return null;
+        try {
+            TypedQuery<Cabin> query = entityManager.createQuery(
+                    "SELECT c FROM Cabin c WHERE c.id = :id", Cabin.class
+            );
+            query.setParameter("id", id); // Set the parameter value
+            return query.getSingleResult();
+        } catch (NoResultException e) {
+            // Handle the NoResultException, for example, by returning null
+            return null;
+        }
     }
 
     @Override
@@ -38,6 +52,10 @@ public class CabinsRepositoryJpa implements CabinsRepository<Cabin> {
 
     @Override
     public Cabin deleteById(int id) {
-        return null;
+        Cabin cabinToDelete = findById(id); // Find the entity by id
+        if (cabinToDelete != null) {
+            entityManager.remove(cabinToDelete); // Remove the entity
+        }
+        return cabinToDelete; // Return the deleted entity or null if not found
     }
 }
