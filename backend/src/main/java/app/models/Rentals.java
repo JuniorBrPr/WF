@@ -1,11 +1,9 @@
 package app.models;
-
 import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import java.time.LocalDate;
 
 @Entity
@@ -20,7 +18,9 @@ public class Rentals {
     private Long id;
     private LocalDate start;
     private LocalDate end;
-    public enum Status {
+    private double cost;
+
+    private enum Status {
         REQUESTED,
         APPROVED,
         DECLINED,
@@ -29,24 +29,20 @@ public class Rentals {
         CANCELLED,
         BLOCKED
     }
-    public double cost;
 
     @ManyToOne
-    public Cabin cabin;
+    private Cabin cabin;
 
-
-    public boolean assignCabin(Cabin cabin) {
+    public void assignCabin(Cabin cabin) {
         if (cabin == null || this.cabin == cabin) {
             // no change required
-            return false;
+            return;
         }
 
         // update both sides of the association; beware of mutual recursion...
         this.setCabin(cabin);
         cabin.addRental(this);
-        return true;
     }
-
 
     public void removeCabin() {
         if (cabin != null) {
