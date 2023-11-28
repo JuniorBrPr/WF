@@ -1,17 +1,17 @@
 package app;
 
 import app.models.Cabin;
+import app.models.Rentals;
 import app.repositories.CabinsRepositoryJpa;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @SpringBootApplication
-@RestController
 public class BackendApplication implements CommandLineRunner {
     private final CabinsRepositoryJpa cabinsRepository;
 
@@ -30,18 +30,40 @@ public class BackendApplication implements CommandLineRunner {
         this.createInitialCabins();
     }
 
-    public void createInitialCabins(){
+    public void createInitialCabins() {
         List<Cabin> cabins = cabinsRepository.findAll();
         int createThisManyCabins = 6;
-        if(cabins.size() >= createThisManyCabins) {
-            return; // If there are already 6 or more cabins, exit the method
+        if (cabins.size() >= createThisManyCabins) {
+            return;
         }
 
         System.out.println("Configure some initial cabins");
 
         for (int i = 0; i < createThisManyCabins; i++) {
-            Cabin cabin = Cabin.generateRandomCabin(i); // Use 'i' or any unique identifier for cabin creation
+            Cabin cabin = Cabin.generateRandomCabin(i);
+            // Generate and associate Rentals
+//             generateRentalsForCabin(cabin, 3);
+//            cabin.setRentals(rentals);
+
             this.cabinsRepository.save(cabin);
         }
+    }
+
+    private void generateRentalsForCabin(Cabin cabin, int numRentals) {
+//        Set<Rentals> rentals = new HashSet<>(); // Initialize the set to an empty HashSet
+
+        for (int i = 0; i < numRentals; i++) {
+            Rentals rental = new Rentals();
+            rental.setId(System.currentTimeMillis());
+            rental.setStart(LocalDate.now().plusDays(i));
+            rental.setEnd(LocalDate.now().plusDays(i + 7L));
+            rental.setCost(500.00 * (i + 1));
+
+//            cabin.addRental(rental);
+            rental.assignCabin(cabin);
+//            rentals.add(rental);
+        }
+
+//        return rentals;
     }
 }

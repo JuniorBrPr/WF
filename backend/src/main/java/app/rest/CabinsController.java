@@ -1,8 +1,8 @@
 package app.rest;
 
 import app.models.Cabin;
+import app.models.Rentals;
 import app.repositories.CabinsRepository;
-import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +11,8 @@ import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @RestController
@@ -76,5 +78,42 @@ public class CabinsController {
             return ResponseEntity.status(HttpStatus.OK).body(cabin);
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Cabin not found");
+    }
+
+    @PostMapping("{cabinId}/rentals")
+    public ResponseEntity<Rentals> addRentals(@PathVariable int cabinId, @RequestBody Rentals rentals) {
+        // Check if cabin exists
+        Cabin cabin = cabinsRepository.findById(cabinId);
+        if (cabin == null) {
+            throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED, "Cabin not found");
+        }
+
+        // Check if start and end dates are provided, else set default values
+        if (rentals.getStart() == null) {
+            rentals.setStart(LocalDate.now().plusDays(1)); // Start date set to tomorrow if not provided
+        }
+        if (rentals.getEnd() == null) {
+            rentals.setEnd(rentals.getStart().plusWeeks(1)); // End date set to start date + 1 week if not provided
+        }
+
+        // Validate start and end dates
+        if (rentals.getEnd().isBefore(rentals.getStart()) ||
+                rentals.getStart().plusDays(1).until(rentals.getEnd(), ChronoUnit.DAYS) % 7 != 0) {
+            throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED, "Invalid date range");
+        }
+
+        // Create new Rental and associate it with the cabin
+        Rentals newRental = new Rentals();
+        newRental.setStart(rentals.getStart());
+        newRental.setEnd(rentals.getEnd());
+        newRental.setCost(rentals.getCost()); // Set cost as provided
+
+//        newRental.assignCabin(cabin);
+        cabin.addRental(rentals);
+
+        // Return the created Rental
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest().path("/{id}").buildAndExpand(newRental.getId()).toUri();
+        return ResponseEntity.status(HttpStatus.CREATED).location(location).body(newRental);
     }
 }

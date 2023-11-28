@@ -1,6 +1,4 @@
 package app.models;
-
-
 import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -9,8 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 @Entity
 @Getter
@@ -82,14 +79,21 @@ public class Cabin {
     }
 
     @OneToMany(mappedBy = "cabin")
-    private List<Rentals> rentals;
+    private Set<Rentals> rentals = new HashSet<>(); // Initialize the set to an empty HashSet
 
-    public void addRental(Rentals rental) {
-        rentals.add(rental);
-        if (rental.getCabin() != this) {
-            rental.setCabin(this);
+
+    public boolean addRental(Rentals rental) {
+        if (rental == null || this.rentals.contains(rental)) {
+            // no change required
+            return false;
         }
+
+//         update both sides of the association; beware of mutual recursion...
+        this.rentals.add(rental);
+        rental.setCabin(this);
+        return true;
     }
+
 
     public void removeRental(Rentals rental) {
         rentals.remove(rental);
@@ -98,3 +102,4 @@ public class Cabin {
         }
     }
 }
+
