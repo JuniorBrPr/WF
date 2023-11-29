@@ -1,4 +1,5 @@
 package app.models;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -79,6 +80,7 @@ public class Cabin {
     }
 
     @OneToMany(mappedBy = "cabin")
+    @JsonBackReference
     private Set<Rentals> rentals = new HashSet<>(); // Initialize the set to an empty HashSet
 
 

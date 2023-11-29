@@ -1,4 +1,5 @@
 package app.models;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -31,6 +32,7 @@ public class Rentals {
     }
 
     @ManyToOne(cascade = CascadeType.PERSIST)
+    @JsonManagedReference
     private Cabin cabin;
 
     public void assignCabin(Cabin cabin) {
