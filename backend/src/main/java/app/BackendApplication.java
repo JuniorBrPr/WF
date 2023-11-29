@@ -3,6 +3,7 @@ package app;
 import app.models.Cabin;
 import app.models.Rentals;
 import app.repositories.CabinsRepositoryJpa;
+import app.repositories.RentalsRepositoryJpa;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -14,9 +15,11 @@ import java.util.List;
 @SpringBootApplication
 public class BackendApplication implements CommandLineRunner {
     private final CabinsRepositoryJpa cabinsRepository;
+    private final RentalsRepositoryJpa rentalsRepository;
 
-    public BackendApplication(CabinsRepositoryJpa cabinsRepository) {
+    public BackendApplication(CabinsRepositoryJpa cabinsRepository, RentalsRepositoryJpa rentalsRepository) {
         this.cabinsRepository = cabinsRepository;
+        this.rentalsRepository = rentalsRepository;
     }
 
     public static void main(String[] args) {
@@ -42,28 +45,24 @@ public class BackendApplication implements CommandLineRunner {
         for (int i = 0; i < createThisManyCabins; i++) {
             Cabin cabin = Cabin.generateRandomCabin(i);
             // Generate and associate Rentals
-//             generateRentalsForCabin(cabin, 3);
-//            cabin.setRentals(rentals);
-
+             generateRentalsForCabin(cabin, 3);
             this.cabinsRepository.save(cabin);
         }
     }
 
     private void generateRentalsForCabin(Cabin cabin, int numRentals) {
-//        Set<Rentals> rentals = new HashSet<>(); // Initialize the set to an empty HashSet
-
         for (int i = 0; i < numRentals; i++) {
             Rentals rental = new Rentals();
-            rental.setId(System.currentTimeMillis());
-            rental.setStart(LocalDate.now().plusDays(i));
-            rental.setEnd(LocalDate.now().plusDays(i + 7L));
+            rental.setStartDate(LocalDate.now().plusDays(i));
+            rental.setEndDate(LocalDate.now().plusDays(i + 7L));
             rental.setCost(500.00 * (i + 1));
 
-//            cabin.addRental(rental);
-            rental.assignCabin(cabin);
-//            rentals.add(rental);
-        }
+            // Set the cabin for the rental
+            rental.setCabin(cabin);
 
-//        return rentals;
+            // Save the rental
+            rentalsRepository.save(rental);
+        }
     }
+
 }

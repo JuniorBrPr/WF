@@ -89,23 +89,24 @@ public class CabinsController {
         }
 
         // Check if start and end dates are provided, else set default values
-        if (rentals.getStart() == null) {
-            rentals.setStart(LocalDate.now().plusDays(1)); // Start date set to tomorrow if not provided
+        if (rentals.getStartDate() == null) {
+            rentals.setStartDate(LocalDate.now().plusDays(1)); // Start date set to tomorrow if not provided
         }
-        if (rentals.getEnd() == null) {
-            rentals.setEnd(rentals.getStart().plusWeeks(1)); // End date set to start date + 1 week if not provided
+        if (rentals.getEndDate() == null) {
+            rentals.setEndDate(rentals.getStartDate().plusWeeks(1)); // End date set to start date + 1 week if not provided
         }
 
         // Validate start and end dates
-        if (rentals.getEnd().isBefore(rentals.getStart()) ||
-                rentals.getStart().plusDays(1).until(rentals.getEnd(), ChronoUnit.DAYS) % 7 != 0) {
+        if (rentals.getEndDate().isBefore(rentals.getStartDate()) ||
+                rentals.getStartDate().plusDays(1).until(rentals.getEndDate(), ChronoUnit.DAYS) % 7 != 0) {
             throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED, "Invalid date range");
         }
 
         // Create new Rental and associate it with the cabin
         Rentals newRental = new Rentals();
-        newRental.setStart(rentals.getStart());
-        newRental.setEnd(rentals.getEnd());
+        newRental.setId(0);
+        newRental.setStartDate(rentals.getStartDate());
+        newRental.setEndDate(rentals.getEndDate());
         newRental.setCost(rentals.getCost()); // Set cost as provided
 
 //        newRental.assignCabin(cabin);

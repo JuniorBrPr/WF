@@ -15,9 +15,9 @@ public class Rentals {
     @JsonView(Views.Summary.class)
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Specify the generation strategy
-    private Long id;
-    private LocalDate start;
-    private LocalDate end;
+    private int id;
+    private LocalDate startDate;
+    private LocalDate endDate;
     private double cost;
 
     private enum Status {
@@ -30,7 +30,7 @@ public class Rentals {
         BLOCKED
     }
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private Cabin cabin;
 
     public void assignCabin(Cabin cabin) {
