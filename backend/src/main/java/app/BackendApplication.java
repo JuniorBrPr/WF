@@ -58,7 +58,7 @@ public class BackendApplication implements CommandLineRunner {
             rental.setCost(500.00 * (i + 1));
 
             // Set the cabin for the rental
-            rental.setCabin(cabin);
+            rental.assignCabin(cabin);
 
             // Save the rental
             rentalsRepository.save(rental);
