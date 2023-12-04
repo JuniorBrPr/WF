@@ -16,7 +16,7 @@ public class Rentals {
 
     @JsonView(Views.Summary.class)
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Specify the generation strategy
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private LocalDate startDate;
     private LocalDate endDate;
