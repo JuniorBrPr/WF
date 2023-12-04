@@ -1,5 +1,6 @@
 package app.repositories;
 
+import app.models.Cabin;
 import app.models.Rentals;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
@@ -55,5 +56,23 @@ public class RentalsRepositoryJpa implements RentalsRepository<Rentals> {
             entityManager.remove(rentalsToDelete); // Remove the entity
         }
         return rentalsToDelete; // Return the deleted entity or null if not found
+    }
+
+    @Override
+    public List<Rentals> findByQuery(String jpqlName, Object... params) {
+        try {
+            TypedQuery<Rentals> query = entityManager.createNamedQuery(jpqlName, Rentals.class);
+
+            int index = 1;
+            for (Object param : params) {
+                query.setParameter(index++, param);
+            }
+
+            return query.getResultList();
+        } catch (IllegalArgumentException e) {
+            // Handle exceptions or return null/empty list as required
+            e.printStackTrace();
+            return null;
+        }
     }
 }

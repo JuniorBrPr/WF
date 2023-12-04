@@ -3,6 +3,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,6 +15,8 @@ import java.util.*;
 @Getter
 @Setter
 @NoArgsConstructor
+@NamedQuery(name="Cabin_find_by_type", query = "SELECT c FROM Cabin c  WHERE c.type = ?1")
+@NamedQuery(name="Cabin_find_by_locationName", query = "SELECT c FROM Cabin c  WHERE c.location = ?1")
 public class Cabin {
     @JsonView(Views.Summary.class)
     @Id

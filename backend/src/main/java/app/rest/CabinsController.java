@@ -3,7 +3,10 @@ package app.rest;
 import app.models.Cabin;
 import app.models.Rentals;
 import app.repositories.CabinsRepository;
+import app.repositories.RentalsRepository;
+import app.repositories.RentalsRepositoryJpa;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,9 +25,38 @@ public class CabinsController {
     @Autowired
     CabinsRepository<Cabin> cabinsRepository;
 
-    @GetMapping(path = "", produces = "application/json")
-    public List<Cabin> getTestCabins() {
-        return cabinsRepository.findAll();
+    @Autowired
+    RentalsRepository<Rentals> rentalsRepository;
+
+
+    @GetMapping(produces = "application/json")
+    public ResponseEntity<?> getTestCabins(
+            @RequestParam(value = "type", required = false) String type,
+            @RequestParam(value = "location", required = false) String location
+    ) {
+        if (type != null && location != null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Unsupported combination of parameters: 'type' and 'location'");
+        }
+
+        if (location != null) {
+            List<Cabin> cabinsByLocation = cabinsRepository.findByQuery("Cabin_find_by_locationName", location);
+            return ResponseEntity.status(HttpStatus.OK).body(cabinsByLocation);
+        }
+
+        if (type != null) {
+            try {
+                Cabin.Type enumType = Cabin.Type.valueOf(type);
+                List<Cabin> cabinsByType = cabinsRepository.findByQuery("Cabin_find_by_type", enumType);
+                return ResponseEntity.status(HttpStatus.OK).body(cabinsByType);
+            } catch (IllegalArgumentException e) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body("Type value does not match any Cabin.Type enumeration value");
+            }
+        }
+
+        List<Cabin> allCabins = cabinsRepository.findAll();
+        return ResponseEntity.status(HttpStatus.OK).body(allCabins);
     }
 
     @GetMapping("{id}")
@@ -117,4 +149,21 @@ public class CabinsController {
                 .fromCurrentRequest().path("/{id}").buildAndExpand(newRental.getId()).toUri();
         return ResponseEntity.status(HttpStatus.CREATED).location(location).body(newRental);
     }
+
+    @GetMapping("/{cabinId}/rentals")
+    public ResponseEntity<List<Rentals>> getCabinRentals(
+            @PathVariable int cabinId,
+            @RequestParam(value = "from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam(value = "to") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate
+    ) {
+        Cabin cabin = cabinsRepository.findById(cabinId);
+        if (cabin == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Cabin not found");
+        }
+
+        // Develop a named JPQL query with three positional parameters
+        List<Rentals> cabinRentals = rentalsRepository.findByQuery("Rental_find_by_cabinId_and_period", cabinId, startDate, endDate);
+        return ResponseEntity.status(HttpStatus.OK).body(cabinRentals);
+    }
+
 }

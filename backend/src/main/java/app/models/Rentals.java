@@ -11,6 +11,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @NoArgsConstructor
+@NamedQuery(name = "Rental_find_by_cabinId_and_period", query = "SELECT R FROM Rentals R WHERE R.cabin.id =  ?1 AND R.startDate >= ?2 AND R.endDate <= ?3")
 public class Rentals {
 
     @JsonView(Views.Summary.class)

@@ -10,4 +10,5 @@ public interface CabinsRepository<Cabin> {
     Cabin findById(int id);
     Cabin save(Cabin cabin);
     Cabin deleteById(int id);
+    List<Cabin> findByQuery(String jpqlName, Object... params);
 }
