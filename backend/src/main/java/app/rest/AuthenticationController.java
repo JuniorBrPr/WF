@@ -1,5 +1,6 @@
 package app.rest;
 
+import app.APIConfig;
 import app.JWToken;
 import app.models.User;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -18,6 +19,8 @@ public class AuthenticationController {
     @Autowired
     private JWToken jwtTokenGenerator; // Autowiring JWToken
 
+    @Autowired
+    APIConfig apiConfig;
     @PostMapping("/login")
     public ResponseEntity<User> login(@RequestBody ObjectNode requestBody) {
         String email = requestBody.get("email").asText();
@@ -29,9 +32,13 @@ public class AuthenticationController {
             long randomId = new Random().nextLong();
             User user = new User(randomId, usernameBeforeAt, email, password, "registered user");
 
+            // Set values for JWToken
+            jwtTokenGenerator.setCallname(usernameBeforeAt);
+            jwtTokenGenerator.setAccountId(randomId);
+            jwtTokenGenerator.setRole("registered user");
+
             // Generate JWT token using JWToken class
-            String tokenString = jwtTokenGenerator
-                    .encode(randomId, usernameBeforeAt, "registered user");
+            String tokenString = jwtTokenGenerator.encode(this.apiConfig.getPassphrase(), this.apiConfig.getIssuer(), this.apiConfig.getExpiration()); // Change expiration as needed
 
             return ResponseEntity.accepted()
                     .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenString) // Attach token to the response header
