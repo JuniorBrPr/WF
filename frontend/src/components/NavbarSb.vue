@@ -5,7 +5,7 @@
           class="navbar-toggler-icon"></span></button>
       <div id="navcol-4" class="collapse navbar-collapse flex-grow-0 order-md-first">
         <ul class="navbar-nav me-auto">
-          <li class="nav-item ">
+          <li class="nav-item">
             <router-link class="nav-link m-1 item" :class="{ active: isActive }" to="/"><h3>Home</h3></router-link>
           </li>
           <li class="nav-item">
@@ -43,28 +43,40 @@
           </li>
         </ul>
         <div class="d-md-none my-2">
-          <router-link class="btn btn-lg m-1" to="/sign-up">Sign up</router-link>
-          <router-link class="btn btn-lg m-1" to="/sign-in">Log in</router-link>
+          <router-link v-if="!isAuthenticated" class="btn btn-lg m-1" to="/sign-up">Sign up</router-link>
+          <router-link v-if="!isAuthenticated" class="btn btn-lg m-1" to="/sign-in">Log in</router-link>
+          <router-link v-if="isAuthenticated" class="btn btn-lg m-1" to="/sign-out">Log out</router-link>
         </div>
       </div>
       <div class="d-none d-md-block">
-        <router-link class="btn btn-lg m-1" to="/sign-up">Sign up</router-link>
-        <router-link class="btn btn-lg m-1" to="/sign-in">Log in</router-link>
+        <router-link v-if="!isAuthenticated" class="btn btn-lg m-1" to="/sign-up">Sign up</router-link>
+        <router-link v-if="!isAuthenticated" class="btn btn-lg m-1" to="/sign-in">Log in</router-link>
+        <router-link v-if="isAuthenticated" class="btn btn-lg m-1" to="/sign-out">Log out</router-link>
       </div>
     </div>
   </nav>
-
 </template>
 
 <script>
+import {inject} from "vue";
 
 export default {
+  inject: ['sessionService'],
   name: "NavbarSb",
 
   data() {
     return {
       cabinsActive: false,
     }
+  },
+  setup() {
+    const sessionService = inject('sessionSbService');
+    const isAuthenticated = sessionService.getTokenFromBrowserStorage() != null;
+
+    return {
+      sessionService,
+      isAuthenticated,
+    };
   },
   methods: {
   },

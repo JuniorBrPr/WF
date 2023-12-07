@@ -23,6 +23,10 @@ const routes = [
         component: signIn
     },
     {
+        path: '/sign-out',
+        redirect: '/sign-in?signOff=true'
+    },
+    {
         path: '/cabins',
         name: 'cabins',
         children: [

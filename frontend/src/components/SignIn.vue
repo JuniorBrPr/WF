@@ -20,8 +20,10 @@
 
 <script>
 import { inject } from 'vue';
+import {useRoute} from "vue-router";
 
 export default {
+  inject: ['sessionService'],
   name: 'SignIn',
   data() {
     return {
@@ -33,7 +35,14 @@ export default {
   },
   setup() {
     const sessionService = inject('sessionSbService');
+    const route = useRoute();
+
     const isAuthenticated = sessionService.isAuthenticated;
+
+    // Check for the signOff query parameter in the route
+    if (route.query.signOff) {
+      sessionService.signOut(); // Call signOut method if signOff parameter is present
+    }
 
     return {
       sessionService,
