@@ -9,12 +9,18 @@ import cabinsDetail32 from "@/components/cabins/CabinsDetail32.vue";
 import cabinsDetail34 from "@/components/cabins/CabinsDetail34.vue";
 import cabinsOverview37 from "@/components/cabins/CabinsOverview37.vue";
 import cabinsDetail37 from "@/components/cabins/CabinsDetail37.vue";
+import signIn from "@/components/SignIn";
 
 const routes = [
     {
         path: '/',
         name: 'Home',
         component: welcomeComponent
+    },
+    {
+        path: '/sign-in',
+        name: 'Sign-in',
+        component: signIn
     },
     {
         path: '/cabins',

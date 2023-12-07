@@ -32,8 +32,6 @@ export class CabinsAdaptor {
     }
 
     async asyncSave(cabin) {
-
-
         if (cabin.id === 0) {
             const response = await this.fetchJson(this.resourceUrl, {
                 method: 'POST',
