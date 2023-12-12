@@ -11,18 +11,25 @@ import {CabinsAdaptor} from "@/services/CabinsAdaptor";
 import {SessionSbService} from "@/services/SessionSbService";
 import {shallowReactive} from "vue";
 import {CONFIG} from "../app-config";
+import {FetchInterceptor} from "@/FetchInterceptor";
 export default {
   name: "AppComponent44",
   components: {NavbarSb, HeaderSb},
 
   provide() {
     this.theSessionService = shallowReactive(
-        new SessionSbService(CONFIG.BACKEND_URL + "/authentication", CONFIG.JWT_STORAGE_ITEM) // TODO FIX RESOUR URL
+        new SessionSbService("http://localhost:8086/api/authentication", CONFIG.JWT_STORAGE_ITEM) // TODO FIX RESOUR URL
     )
+    this.theFetchInterceptor =
+        new FetchInterceptor(this.theSessionService, this.$router)
     return {
       cabinsService: new CabinsAdaptor(CONFIG.BACKEND_URL + "/cabins/"),
       sessionService: this.theSessionService,
     }
+  },
+  unmounted() {
+    console.log("App.unmounted() has been called.")
+    this.theFetchInterceptor.unregister();
   }
 }
 </script>
