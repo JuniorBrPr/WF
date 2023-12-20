@@ -32,8 +32,6 @@ export class FetchInterceptor {
     }
 
     request(url, options) {
-        console.log(this)
-        console.log(this.session.currentToken)
         let token = this.session.currentToken;
 
         if (token === null) {
@@ -56,6 +54,13 @@ export class FetchInterceptor {
     }
 
     response(response) {
+        if (response.status === 401) {
+            console.log(
+                "FetchInterceptor: 401 received. Current token = " +
+                    this.session.currentToken
+            );
+            this.router.push('/sign-out');
+        }
         return response;
     }
 
