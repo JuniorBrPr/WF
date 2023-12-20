@@ -12,59 +12,67 @@
       <div class="form-group">
         <button type="submit" class="btn btn-primary">Sign In</button>
       </div>
-      <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
-      <p v-if="token">Token: {{ token }}</p>
+      <p v-if="errorMessage !== null && errorMessage !== undefined" class="error-message">{{ errorMessage }}</p>
+      <p v-if="token !== null && token !== undefined">Token: {{ token }}</p>
     </form>
   </div>
 </template>
 
 <script>
-import { inject } from 'vue';
-import {useRoute} from "vue-router";
+import { inject, ref, watch } from 'vue';
+import { useRoute } from 'vue-router';
 
 export default {
   name: 'SignIn',
   inject: ['sessionService'],
-  data() {
-    return {
-      email: '',
-      password: '',
-      errorMessage: '',
-      token: null,
-    };
-  },
   setup() {
-    const sessionService = inject('sessionSbService');
+    const sessionService = inject('sessionService');
     const route = useRoute();
+    const email = ref('');
+    const password = ref('');
+    const errorMessage = ref('');
+    const token = ref(null);
+    const isAuthenticated = ref(false);
 
-    const isAuthenticated = sessionService.isAuthenticated;
-
-    // Check for the signOff query parameter in the route
-    if (route.query.signOff) {
-      sessionService.signOut(); // Call signOut method if signOff parameter is present
+    if (sessionService && sessionService.isAuthenticated) {
+      isAuthenticated.value = sessionService.isAuthenticated();
     }
 
-    return {
-      sessionService,
-      isAuthenticated,
-    };
-  },
-  methods: {
-    async signIn() {
+    watch(() => route.query.signOff, (newValue) => {
+      if (newValue) {
+        sessionService.signOut();
+      }
+    });
+
+    const signIn = async () => {
       try {
-        const response = await this.sessionService.asyncSignIn(this.email, this.password);
+        if (!sessionService || !sessionService.asyncSignIn) {
+          throw new Error('asyncSignIn method not available');
+        }
+
+        const response = await sessionService.asyncSignIn(email.value, password.value);
+
         if (response) {
-          this.token = response.token;
-          this.errorMessage = '';
+          token.value = response.token;
+          errorMessage.value = '';
         } else {
-          this.token = null;
-          this.errorMessage = 'Invalid email or password. Please try again.';
+          token.value = null;
+          errorMessage.value = 'Invalid email or password. Please try again.';
         }
       } catch (error) {
-        console.error('Error signing in:', error);
-        this.errorMessage = 'An error occurred during sign-in. Please try again later.';
+        errorMessage.value = 'An error occurred during sign-in. Please try again later.';
+        console.error('Error signing in:', error.message);
       }
-    },
+    };
+
+    return {
+      email,
+      password,
+      errorMessage,
+      token,
+      isAuthenticated,
+      signIn,
+    };
   },
 };
 </script>

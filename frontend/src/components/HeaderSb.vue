@@ -2,8 +2,6 @@
 import {inject} from "vue";
 
 export default {
-  inject: ['sessionService'],
-
   name: "HeaderSb",
   data() {
     return {
@@ -21,12 +19,10 @@ export default {
   },
   setup() {
     // Inject the SessionSbService
-    const sessionService = inject('sessionSbService');
-
-    // You can use the sessionService here as needed
+    const sessionService = inject('sessionService');
 
     return {
-      sessionService, // Make the injected service accessible in the template or other component logic
+      sessionService,
     };
   }
 }
