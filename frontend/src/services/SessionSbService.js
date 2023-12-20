@@ -31,8 +31,8 @@ export class SessionSbService {
         if (jsonAccount != null) {
             this._currentAccount = JSON.parse(jsonAccount);
         }
-        // console.log("SessionService recovered token: ", this._currentToken);
-        // console.log("Current Account:", this._currentAccount);
+        console.log("SessionService recovered token: ", this._currentToken);
+        console.log("Current Account:", this._currentAccount);
         return this._currentToken;
     }
 

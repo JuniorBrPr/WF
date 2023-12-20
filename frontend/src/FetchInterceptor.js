@@ -11,6 +11,12 @@ export class FetchInterceptor {
         this.router = router;
 
         FetchInterceptor.theInstance = this;
+        FetchInterceptor.theInstance = this;
+        this.request = this.request.bind(this);
+        this.requestError = this.requestError.bind(this);
+        this.response = this.response.bind(this);
+        this.responseError = this.responseError.bind(this);
+
 
         this.unregister = fetchIntercept.register({
             request: this.request,
@@ -26,6 +32,8 @@ export class FetchInterceptor {
     }
 
     request(url, options) {
+        console.log(this)
+        console.log(this.session.currentToken)
         let token = this.session.currentToken;
 
         if (token === null) {
@@ -54,9 +62,5 @@ export class FetchInterceptor {
     responseError(error) {
         console.error('Response error:', error);
         return Promise.reject(error);
-    }
-
-    unregisterInterceptor() {
-        this.unregister();
     }
 }
