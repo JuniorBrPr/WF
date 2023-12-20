@@ -21,12 +21,12 @@ export class FetchInterceptor {
 
         console.log(
             "FetchInterceptor has been registered. Current token = " +
-            this.session.currentToken()
+                this.session.currentToken
         );
     }
 
     request(url, options) {
-        let token = this.session.currentToken();
+        let token = this.session.currentToken;
 
         if (token === null) {
             return [url, options];
