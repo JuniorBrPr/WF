@@ -25,24 +25,20 @@ export class FetchInterceptor {
             responseError: this.responseError,
         });
 
-        console.log(
-            "FetchInterceptor has been registered. Current token = " +
-                this.session.currentToken
-        );
+        console.log("FetchInterceptor has been registered. Current token = " + this.session.currentToken);
     }
 
     request(url, options) {
-        let token = this.session.currentToken;
-
+        let token = this.session.getTokenFromBrowserStorage();
+        console.log(token.toString());
         if (token === null) {
             return [url, options];
         } else if (options === null || !options.headers) {
-            return [url, { headers: { Authorization: token } }];
+            return [url, {headers: {Authorization: token}}];
         } else {
-            let newOptions = { ...options };
+            let newOptions = {...options};
             newOptions.headers = {
-                ...newOptions.headers,
-                Authorization: token,
+                ...newOptions.headers, Authorization: token,
             };
             return [url, newOptions];
         }
@@ -54,18 +50,35 @@ export class FetchInterceptor {
     }
 
     response(response) {
-        if (response.status === 401) {
-            console.log(
-                "FetchInterceptor: 401 received. Current token = " +
-                    this.session.currentToken
-            );
-            this.router.push('/sign-out');
+        console.log("Response: ", response);
+        if (response.status.toString().charAt(0) === '4') {
+            return this.responseError(response);
         }
         return response;
     }
 
-    responseError(error) {
-        console.error('Response error:', error);
-        return Promise.reject(error);
+    responseError(response) {
+        if (!this.session.isAuthenticated) {
+            this.router.push('/sign-out');
+            return response;
+        }
+        if (response.status === 401) {
+            this.router.push({
+                name: 'Error', params: {
+                    status: response.status,
+                    statusText: response.statusText,
+                    message: "You are not authorized to access this resource.",
+                }
+            });
+            return response;
+        }
+        this.router.push({
+            name: 'Error', params: {
+                status: response.status,
+                statusText: response.statusText,
+                message: "An error occurred while accessing the resource.",
+            }
+        });
+        return response;
     }
 }

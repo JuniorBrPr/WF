@@ -58,8 +58,6 @@
 </template>
 
 <script>
-import {inject} from "vue";
-
 export default {
   inject: ['sessionService'],
   name: "NavbarSb",
@@ -69,21 +67,17 @@ export default {
       cabinsActive: false,
     }
   },
-  setup() {
-    const sessionService = inject('sessionSbService');
-    const isAuthenticated = sessionService.getTokenFromBrowserStorage() != null;
-
-    return {
-      sessionService,
-      isAuthenticated,
-    };
-  },
   methods: {
   },
   watch: {
     $route() {
       this.cabinsActive = this.$route.path.includes('cabins');
     }
+  },
+  computed: {
+    isAuthenticated() {
+      return this.sessionService.isAuthenticated;
+    },
   },
 }
 </script>

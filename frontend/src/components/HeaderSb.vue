@@ -1,5 +1,4 @@
 <script>
-import {inject} from "vue";
 
 export default {
   inject: ['sessionService'],
@@ -20,14 +19,6 @@ export default {
     }
   },
   setup() {
-    // Inject the SessionSbService
-    const sessionService = inject('sessionSbService');
-
-    // You can use the sessionService here as needed
-
-    return {
-      sessionService, // Make the injected service accessible in the template or other component logic
-    };
   }
 }
 </script>

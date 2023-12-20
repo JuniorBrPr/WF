@@ -31,8 +31,8 @@ export class SessionSbService {
         if (jsonAccount != null) {
             this._currentAccount = JSON.parse(jsonAccount);
         }
-        console.log("SessionService recovered token: ", this._currentToken);
-        console.log("Current Account:", this._currentAccount);
+        // console.log("SessionService recovered token: ", this._currentToken);
+        // console.log("Current Account:", this._currentAccount);
         return this._currentToken;
     }
 
@@ -53,7 +53,7 @@ export class SessionSbService {
     async asyncSignIn(email, password) {
         const body = JSON.stringify({ email: email, password: password });
         try {
-            let response = await fetch(`${this.RESOURCES_URL}/authentication/login`, {
+            let response = await fetch(`http://localhost:8086/api/authentication/login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: body
@@ -69,7 +69,7 @@ export class SessionSbService {
                 return null;
             }
         } catch (error) {
-            console.error('Error occurred during sign-in:', error);
+            console.error('RequestError occurred during sign-in:', error);
             return null;
         }
     }

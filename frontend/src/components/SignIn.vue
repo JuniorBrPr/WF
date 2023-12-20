@@ -54,14 +54,17 @@ export default {
       try {
         const response = await this.sessionService.asyncSignIn(this.email, this.password);
         if (response) {
-          this.token = response.token;
+          console.log('SignIn successful:', response);
+          console.log('Token:', response.token);
+          this.sessionService.saveTokenIntoBrowserStorage(response.account, response.token);
+          console.log('Token saved into browser storage.');
           this.errorMessage = '';
         } else {
           this.token = null;
           this.errorMessage = 'Invalid email or password. Please try again.';
         }
       } catch (error) {
-        console.error('Error signing in:', error);
+        console.error('RequestError signing in:', error);
         this.errorMessage = 'An error occurred during sign-in. Please try again later.';
       }
     },

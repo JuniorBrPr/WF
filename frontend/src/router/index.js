@@ -10,6 +10,7 @@ import cabinsDetail34 from "@/components/cabins/CabinsDetail34.vue";
 import cabinsOverview37 from "@/components/cabins/CabinsOverview37.vue";
 import cabinsDetail37 from "@/components/cabins/CabinsDetail37.vue";
 import signIn from "@/components/SignIn";
+import requestError from "@/components/RequestError.vue";
 
 const routes = [
     {
@@ -25,6 +26,12 @@ const routes = [
     {
         path: '/sign-out',
         redirect: '/sign-in?signOff=true'
+    },
+    {
+        path: '/error',
+        name: 'Error',
+        component: requestError,
+        props: true
     },
     {
         path: '/cabins',

@@ -21,6 +21,7 @@ public class AuthenticationController {
 
     @Autowired
     APIConfig apiConfig;
+
     @PostMapping("/login")
     public ResponseEntity<User> login(@RequestBody ObjectNode requestBody) {
         String email = requestBody.get("email").asText();
@@ -47,4 +48,5 @@ public class AuthenticationController {
             throw new NotAcceptableStatusException("Login failed");
         }
     }
+
 }
