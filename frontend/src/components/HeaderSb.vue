@@ -1,30 +1,26 @@
 <script>
-import {inject} from "vue";
 
 export default {
   name: "HeaderSb",
+  inject: ['sessionService'],
   data() {
     return {
       dateToday: String,
+      userName: this.sessionService._currentAccount.name
     }
   },
   computed: {
     getCurrentDate() {
+      console.log(this.sessionService._currentAccount.name)
       const weekday = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
       const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September",
         "October", "November", "December"];
       const date = new Date();
       return `${weekday[date.getDay()]}, ${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`
-    }
-  },
-  setup() {
-    // Inject the SessionSbService
-    const sessionService = inject('sessionService');
+    },
 
-    return {
-      sessionService,
-    };
-  }
+  },
+
 }
 </script>
 
@@ -41,7 +37,7 @@ export default {
         <h6 class="text-start">Today is {{ getCurrentDate }}
           <div class="text-end">Chill out and feel good</div>
         </h6>
-        <h3>Welcome {{ sessionService.currentAccount ? sessionService.currentAccount.name : 'Visitor' }}!</h3>
+        <h3>Welcome {{ userName ? userName : 'Visitor' }}!</h3>
       </div>
     </div>
     <div class="col align-self-end">

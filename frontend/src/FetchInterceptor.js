@@ -13,19 +13,20 @@ export class FetchInterceptor {
         FetchInterceptor.theInstance = this;
 
         this.unregister = fetchIntercept.register({
-            request: this.request,
-            requestError: this.requestError,
-            response: this.response,
-            responseError: this.responseError,
+            request: this.request.bind(this),
+            requestError: this.requestError.bind(this),
+            response: this.response.bind(this),
+            responseError: this.responseError.bind(this),
         });
 
         console.log(
             "FetchInterceptor has been registered. Current token = " +
-null        );
+            this.session.currentToken
+        );
     }
 
-    request(url, options) {
-        let token = null;
+    request = (url, options) => {
+        let token = this.session.currentToken;
 
         if (token === null) {
             return [url, options];
@@ -39,21 +40,21 @@ null        );
             };
             return [url, newOptions];
         }
-    }
+    };
 
-    requestError(error) {
+    requestError = (error) => {
         console.error('Request error:', error);
         return Promise.reject(error);
-    }
+    };
 
-    response(response) {
+    response = (response) => {
         return response;
-    }
+    };
 
-    responseError(error) {
+    responseError = (error) => {
         console.error('Response error:', error);
         return Promise.reject(error);
-    }
+    };
 
     unregisterInterceptor() {
         this.unregister();

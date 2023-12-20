@@ -15,6 +15,7 @@ export class SessionSbService {
     }
 
 
+
     get currentAccount() {
         return this._currentAccount;
     }
@@ -57,7 +58,7 @@ export class SessionSbService {
     async asyncSignIn(email, password) {
         const body = JSON.stringify({ email: email, password: password });
         try {
-            let response = await fetch(this.RESOURCES_URL, {
+            let response = await fetch(this.RESOURCES_URL + '/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: body,

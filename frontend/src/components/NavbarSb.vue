@@ -43,20 +43,26 @@ export default {
   name: "NavbarSb",
 
   setup() {
-    const sessionService = inject('sessionSbService');
+    const sessionService = inject('sessionService');
     const isAuthenticated = ref(false);
     const cabinsActive = ref(false);
 
-    if (sessionService && sessionService.getTokenFromBrowserStorage) {
-      isAuthenticated.value = sessionService.getTokenFromBrowserStorage() !== null;
-    }
+    const checkAuthentication = () => {
+      isAuthenticated.value = sessionService._currentAccount !== null;
+    };
+
+    // Initial check on component mount
+    checkAuthentication();
+
+    watch(() => sessionService._currentAccount, () => {
+      checkAuthentication();
+    });
 
     watch('$route', (to) => {
       cabinsActive.value = to.path.includes('cabins');
     });
 
     return {
-      sessionService,
       isAuthenticated,
       cabinsActive,
     };
