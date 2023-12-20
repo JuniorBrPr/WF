@@ -23,8 +23,8 @@ import { inject } from 'vue';
 import {useRoute} from "vue-router";
 
 export default {
-  inject: ['sessionService'],
   name: 'SignIn',
+  inject: ['sessionService'],
   data() {
     return {
       email: '',

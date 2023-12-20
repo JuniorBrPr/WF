@@ -1,8 +1,12 @@
 export class SessionSbService {
+    BROWSER_STORAGE_ITEM_NAME;
+    RESOURCES_URL;
+    currentAccount;
     constructor(resourcesUrl, browserStorageItemName) {
         console.log("Created SessionService...");
         this.BROWSER_STORAGE_ITEM_NAME = browserStorageItemName;
         this.RESOURCES_URL = resourcesUrl;
+        console.log(this.RESOURCES_URL)
         this._currentAccount = null;
         this._currentToken = null;
         // Retrieve the current user info from browser storage,
@@ -53,10 +57,11 @@ export class SessionSbService {
     async asyncSignIn(email, password) {
         const body = JSON.stringify({ email: email, password: password });
         try {
-            let response = await fetch(`${this.RESOURCES_URL}/authentication/login`, {
+            let response = await fetch(this.RESOURCES_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: body
+                body: body,
+                credentials: "include"
             });
 
             if (response.ok) {
@@ -66,10 +71,12 @@ export class SessionSbService {
                 return { account, token }; // Return both account and token
             } else {
                 console.log(response);
+                console.log(this.RESOURCES_URL)
                 return null;
             }
         } catch (error) {
             console.error('Error occurred during sign-in:', error);
+            console.log(this.RESOURCES_URL)
             return null;
         }
     }
