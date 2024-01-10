@@ -17,6 +17,7 @@ import java.net.URI;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/cabins/")
@@ -166,4 +167,19 @@ public class CabinsController {
         return ResponseEntity.status(HttpStatus.OK).body(cabinRentals);
     }
 
+    @GetMapping("/{cabinId}/rentals")
+    public ResponseEntity<List<Rentals>> getCabinRentals(
+            @PathVariable int cabinId,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Optional<LocalDate> from,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Optional<LocalDate> to
+    ) {
+        List<Rentals> cabinRentals;
+        if (from.isPresent() && to.isPresent()) {
+            cabinRentals = rentalsRepository.findByQuery("Rental_find_by_cabinId_and_period", cabinId,
+                    from.get(), to.get());
+        } else {
+            cabinRentals = rentalsRepository.findByQuery("Rental_find_by_cabinId", cabinId);
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(cabinRentals);
+    }
 }
