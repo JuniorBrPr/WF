@@ -154,22 +154,6 @@ public class CabinsController {
     @GetMapping("/{cabinId}/rentals")
     public ResponseEntity<List<Rentals>> getCabinRentals(
             @PathVariable int cabinId,
-            @RequestParam(value = "from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-            @RequestParam(value = "to") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate
-    ) {
-        Cabin cabin = cabinsRepository.findById(cabinId);
-        if (cabin == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Cabin not found");
-        }
-
-        // Develop a named JPQL query with three positional parameters
-        List<Rentals> cabinRentals = rentalsRepository.findByQuery("Rental_find_by_cabinId_and_period", cabinId, startDate, endDate);
-        return ResponseEntity.status(HttpStatus.OK).body(cabinRentals);
-    }
-
-    @GetMapping("/{cabinId}/rentals")
-    public ResponseEntity<List<Rentals>> getCabinRentals(
-            @PathVariable int cabinId,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Optional<LocalDate> from,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Optional<LocalDate> to
     ) {
