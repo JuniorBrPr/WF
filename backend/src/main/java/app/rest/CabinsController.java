@@ -4,7 +4,6 @@ import app.models.Cabin;
 import app.models.Rentals;
 import app.repositories.CabinsRepository;
 import app.repositories.RentalsRepository;
-import app.repositories.RentalsRepositoryJpa;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -17,6 +16,7 @@ import java.net.URI;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/cabins/")
@@ -153,17 +153,16 @@ public class CabinsController {
     @GetMapping("/{cabinId}/rentals")
     public ResponseEntity<List<Rentals>> getCabinRentals(
             @PathVariable int cabinId,
-            @RequestParam(value = "from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-            @RequestParam(value = "to") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Optional<LocalDate> from,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Optional<LocalDate> to
     ) {
-        Cabin cabin = cabinsRepository.findById(cabinId);
-        if (cabin == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Cabin not found");
+        List<Rentals> cabinRentals;
+        if (from.isPresent() && to.isPresent()) {
+            cabinRentals = rentalsRepository.findByQuery("Rental_find_by_cabinId_and_period", cabinId,
+                    from.get(), to.get());
+        } else {
+            cabinRentals = rentalsRepository.findByQuery("Rental_find_by_cabinId", cabinId);
         }
-
-        // Develop a named JPQL query with three positional parameters
-        List<Rentals> cabinRentals = rentalsRepository.findByQuery("Rental_find_by_cabinId_and_period", cabinId, startDate, endDate);
         return ResponseEntity.status(HttpStatus.OK).body(cabinRentals);
     }
-
 }

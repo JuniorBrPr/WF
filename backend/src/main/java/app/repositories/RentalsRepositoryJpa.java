@@ -1,6 +1,5 @@
 package app.repositories;
 
-import app.models.Cabin;
 import app.models.Rentals;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
