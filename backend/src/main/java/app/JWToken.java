@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.spec.SecretKeySpec;
@@ -20,28 +19,14 @@ import java.util.Date;
 @NoArgsConstructor
 public class JWToken {
 
+    public static final String JWT_ATTRIBUTE_NAME = "JWTokenInfo";
     private static final String JWT_CALLNAME_CLAIM = "sub";
     private static final String JWT_ROLE_CLAIM = "role";
     private static final String JWT_ISSUER_CLAIM = "iss";
     private static final String JWT_ACCOUNTID_CLAIM = "id";
-    public static final String  JWT_ATTRIBUTE_NAME = "JWTokenInfo";
     private String callname;
     private Long accountId;
     private String role;
-
-    public String encode(String passphrase, String issuer, int expiration) {
-        Key key = getKey(passphrase);
-
-        return Jwts.builder()
-                .claim(JWT_CALLNAME_CLAIM,callname)
-                .claim(JWT_ACCOUNTID_CLAIM, accountId)
-                .claim(JWT_ROLE_CLAIM, role)
-                .setIssuer(issuer)
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + expiration * 1000L))
-                .signWith(key)
-                .compact();
-    }
 
     public static JWToken decode(String token, String issuer, String passphrase)
             throws ExpiredJwtException, MalformedJwtException {
@@ -65,5 +50,19 @@ public class JWToken {
     private static Key getKey(String passphrase) {
         byte[] hmacKey = passphrase.getBytes(StandardCharsets.UTF_8);
         return new SecretKeySpec(hmacKey, SignatureAlgorithm.HS512.getJcaName());
+    }
+
+    public String encode(String passphrase, String issuer, int expiration) {
+        Key key = getKey(passphrase);
+
+        return Jwts.builder()
+                .claim(JWT_CALLNAME_CLAIM, callname)
+                .claim(JWT_ACCOUNTID_CLAIM, accountId)
+                .claim(JWT_ROLE_CLAIM, role)
+                .setIssuer(issuer)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + expiration * 1000L))
+                .signWith(key)
+                .compact();
     }
 }
