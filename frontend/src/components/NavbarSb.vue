@@ -7,16 +7,22 @@
       </button>
       <div id="navcol-4" class="collapse navbar-collapse flex-grow-0 order-md-first">
         <ul class="navbar-nav me-auto">
-          <li class="nav-item dropdown">
-            <div class="nav-link item cursor-pointer" :class="{active: cabinsActive}"
-                 data-bs-toggle="dropdown" aria-expanded="false">
-              <h3 class="pe-auto dropdown-toggle">Cabins </h3>
-            </div>
-            <div class="dropdown-menu">
-              <router-link class="nav-link dropdown-item" :class="{ active: isActive }" to="/cabins/overView31">
-                All cabins overview
+          <li class="nav-item">
+            <a class="nav-link m-1 item disabled" href="#">
+              <h3 class="">My account</h3>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link m-1 item disabled" href="#">
+              <h3>My Bookings</h3>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link m-1 item" href="#">
+              <router-link class="nav-link dropdown-item" to="/cabins/overView37" :class="{ active: isActive }">
+               <h3>Cabins</h3>
               </router-link>
-            </div>
+            </a>
           </li>
         </ul>
 

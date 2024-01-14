@@ -40,7 +40,7 @@ export class FetchInterceptor {
             };
             return [url, newOptions];
         }
-    };
+    }
 
     requestError = (error) => {
         console.error('Request error:', error);
@@ -48,8 +48,13 @@ export class FetchInterceptor {
     };
 
     response = (response) => {
+        if (response.status === 401) {
+            this.router.push('/sign-out');
+        }
         return response;
-    };
+
+    }
+
 
     responseError = (error) => {
         console.error('Response error:', error);

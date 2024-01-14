@@ -1,26 +1,22 @@
 <script>
-
 export default {
   name: "HeaderSb",
   inject: ['sessionService'],
   data() {
     return {
       dateToday: String,
-      userName: this.sessionService._currentAccount.name
+      userName: this.sessionService._currentAccount?.name || 'Visitor'
     }
   },
   computed: {
     getCurrentDate() {
-      console.log(this.sessionService._currentAccount.name)
       const weekday = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
       const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September",
         "October", "November", "December"];
       const date = new Date();
       return `${weekday[date.getDay()]}, ${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`
     },
-
   },
-
 }
 </script>
 
@@ -37,7 +33,7 @@ export default {
         <h6 class="text-start">Today is {{ getCurrentDate }}
           <div class="text-end">Chill out and feel good</div>
         </h6>
-        <h3>Welcome {{ userName ? userName : 'Visitor' }}!</h3>
+        <h3>Welcome {{ userName }}!</h3>
       </div>
     </div>
     <div class="col align-self-end">
