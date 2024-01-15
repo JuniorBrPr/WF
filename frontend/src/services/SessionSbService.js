@@ -31,8 +31,8 @@ export class SessionSbService {
         if (jsonAccount != null) {
             this._currentAccount = JSON.parse(jsonAccount);
         }
-        // console.log("SessionService recovered token: ", this._currentToken);
-        // console.log("Current Account:", this._currentAccount);
+        console.log("SessionService recovered token: ", this._currentToken);
+        console.log("Current Account:", this._currentAccount);
         return this._currentToken;
     }
 
@@ -51,20 +51,19 @@ export class SessionSbService {
     }
 
     async asyncSignIn(email, password) {
-        const body = JSON.stringify({ email: email, password: password });
         try {
-            let response = await fetch(`http://localhost:8086/api/authentication/login`, {
+            const response = await fetch(`http://localhost:8086/api/authentication/login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: body,
-                credentials: 'include'
+                body: JSON.stringify({email: email, password: password}),
             });
 
             if (response.ok) {
-                const user = await response.json();
                 const token = response.headers.get('Authorization');
-                this.saveTokenIntoBrowserStorage(token, user);
-                return  user;
+                console.log("Token: ", token);
+                // const user = await response.json();
+                // this.saveTokenIntoBrowserStorage(token, user);
+                // return  user;
             } else {
                 console.log(response);
                 return null;

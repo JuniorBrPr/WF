@@ -1,84 +1,81 @@
 import fetchIntercept from 'fetch-intercept';
 
 export class FetchInterceptor {
-    static theInstance;
+    static theInstance; // the singleton instance that has been registered
     session;
     router;
-    unregister;
-
+    unregister; // callback function to unregister this instance at shutdown
+    //static getToken;
+    //static router;
     constructor(session, router) {
+        FetchInterceptor.theInstance = this;
         this.session = session;
         this.router = router;
+        // fetchIntercept does not register the object closure, only the methods as functions
+        this.unregister = fetchIntercept.register(this);
 
-        FetchInterceptor.theInstance = this;
-        FetchInterceptor.theInstance = this;
-        this.request = this.request.bind(this);
-        this.requestError = this.requestError.bind(this);
-        this.response = this.response.bind(this);
-        this.responseError = this.responseError.bind(this);
-
-
-        this.unregister = fetchIntercept.register({
-            request: this.request,
-            requestError: this.requestError,
-            response: this.response,
-            responseError: this.responseError,
-        });
-
-        console.log("FetchInterceptor has been registered. Current token = " + this.session.currentToken);
+        // javascript does not know session::getCurrentToken
+        //FetchInterceptor.getToken = () => session.getCurrentToken();
+        //FetchInterceptor.router = router;
+        console.log("FetchInterceptor has been registered; current token = ",
+            FetchInterceptor.theInstance.session.currentToken );
     }
 
     request(url, options) {
-        let token = this.session.getTokenFromBrowserStorage();
-        console.log(token.toString());
-        if (token === null) {
+        let token = FetchInterceptor.theInstance.session.currentToken;
+        //console.log("FetchInterceptor request: ", url, options, token);
+
+        if (token == null) {
             return [url, options];
-        } else if (options === null || !options.headers) {
-            return [url, {headers: {Authorization: token}}];
+        } else if (options == null) {
+            return [url, { headers: { Authorization: token }}]
         } else {
-            let newOptions = {...options};
+            let newOptions = { ...options };
+            // TODO combine existing headers with new Authorization header
             newOptions.headers = {
-                ...newOptions.headers, Authorization: token,
-            };
+                ...options.headers,
+                Authorization: token,
+            }
+            // console.log("FetchInterceptor request: ", url, newOptions);
             return [url, newOptions];
         }
     }
-
     requestError(error) {
-        console.error('Request error:', error);
+        // Called when an error occured during another 'request' interceptor call
+        return Promise.reject(error);
+    }
+    response(response) {
+        // Modify the reponse object
+        // console.log("FetchInterceptor response: ", response);
+        if (response.status >= 400 && response.status < 600) {
+            FetchInterceptor.theInstance.handleErrorInResponse(response);
+        }
+        return response;
+    }
+    responseError(error) {
+        // Handle a fetch error
+        console.log("FetchInterceptor responseError: ", error);
+        let errorMessage = "Some issues with server connectivity?<br/>" + error
+        // FetchInterceptor.router.navigate(['/error'], { state: { message: errorMessage}});  // ng-router
+        FetchInterceptor.theInstance.router.push({ name: 'ERROR', params: { message: errorMessage}});  // vue-router
         return Promise.reject(error);
     }
 
-    response(response) {
-        console.log("Response: ", response);
-        if (response.status.toString().charAt(0) === '4') {
-            return this.responseError(response);
+    async handleErrorInResponse(response) {
+        if (response.status == 401) {
+            console.log(response);
+            this.router.push({ name: 'SIGN-IN',
+                params: { welcomeMessage: "Your token has expired, you need to logon again",
+                }});   // vue-router
+        } else if (response.status != 406) {
+            let errorData = await response.json();
+            console.log("FetchInterceptor response error data: ", errorData);
+            let errorMessage = `Request-url = ${response.request.url}`
+                + `<br>Response status code = ${response.status}`
+                + `<br>Error Message = ${errorData.error}: ${errorData.message}`
+            this.router.push({ name: 'ERROR', params: { message: errorMessage}});  // vue-router
         }
-        return response;
     }
 
-    responseError(response) {
-        if (!this.session.isAuthenticated) {
-            this.router.push('/sign-out');
-            return response;
-        }
-        if (response.status === 401) {
-            this.router.push({
-                name: 'Error', params: {
-                    status: response.status,
-                    statusText: response.statusText,
-                    message: "You are not authorized to access this resource.",
-                }
-            });
-            return response;
-        }
-        this.router.push({
-            name: 'Error', params: {
-                status: response.status,
-                statusText: response.statusText,
-                message: "An error occurred while accessing the resource.",
-            }
-        });
-        return response;
-    }
 }
+
