@@ -7,7 +7,10 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.NotAcceptableStatusException;
 
 import java.util.Random;
@@ -17,17 +20,20 @@ import java.util.Random;
 public class AuthenticationController {
 
     @Autowired
-    private JWToken jwtTokenGenerator; // Autowiring JWToken
-
-    @Autowired
     APIConfig apiConfig;
-
+    @Autowired
+    private JWToken jwtTokenGenerator; // Autowiring JWToken
     @PostMapping("/login")
     public ResponseEntity<User> login(@RequestBody ObjectNode requestBody) {
         String email = requestBody.get("email").asText();
         String password = requestBody.get("password").asText();
+        String usernameBeforeAt = null;
 
-        String usernameBeforeAt = email.split("@")[0]; // Extract the part before '@'
+        if (email.contains("@")) {
+            usernameBeforeAt = email.split("@")[0];
+        } else {
+            throw new NotAcceptableStatusException("Login failed because email is invalid");
+        }
 
         if (password.equals(usernameBeforeAt)) {
             long randomId = new Random().nextLong();
@@ -48,5 +54,4 @@ public class AuthenticationController {
             throw new NotAcceptableStatusException("Login failed");
         }
     }
-
 }

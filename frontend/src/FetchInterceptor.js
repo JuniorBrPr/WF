@@ -21,34 +21,31 @@ export class FetchInterceptor {
             FetchInterceptor.theInstance.session.currentToken );
     }
 
-    request(url, options) {
-        let token = FetchInterceptor.theInstance.session.currentToken;
-        //console.log("FetchInterceptor request: ", url, options, token);
+    request = (url, options) => {
+        let token = this.session.currentToken;
 
-        if (token == null) {
+        if (token === null) {
             return [url, options];
-        } else if (options == null) {
-            return [url, { headers: { Authorization: token }}]
+        } else if (options === null || !options.headers) {
+            return [url, { headers: { Authorization: token } }];
         } else {
             let newOptions = { ...options };
-            // TODO combine existing headers with new Authorization header
             newOptions.headers = {
-                ...options.headers,
+                ...newOptions.headers,
                 Authorization: token,
-            }
-            // console.log("FetchInterceptor request: ", url, newOptions);
+            };
             return [url, newOptions];
         }
     }
-    requestError(error) {
-        // Called when an error occured during another 'request' interceptor call
+
+    requestError = (error) => {
+        console.error('Request error:', error);
         return Promise.reject(error);
-    }
-    response(response) {
-        // Modify the reponse object
-        // console.log("FetchInterceptor response: ", response);
-        if (response.status >= 400 && response.status < 600) {
-            FetchInterceptor.theInstance.handleErrorInResponse(response);
+    };
+
+    response = (response) => {
+        if (response.status === 401) {
+            this.router.push('/sign-out');
         }
         return response;
     }
@@ -61,21 +58,7 @@ export class FetchInterceptor {
         return Promise.reject(error);
     }
 
-    async handleErrorInResponse(response) {
-        if (response.status == 401) {
-            console.log(response);
-            this.router.push({ name: 'SIGN-IN',
-                params: { welcomeMessage: "Your token has expired, you need to logon again",
-                }});   // vue-router
-        } else if (response.status != 406) {
-            let errorData = await response.json();
-            console.log("FetchInterceptor response error data: ", errorData);
-            let errorMessage = `Request-url = ${response.request.url}`
-                + `<br>Response status code = ${response.status}`
-                + `<br>Error Message = ${errorData.error}: ${errorData.message}`
-            this.router.push({ name: 'ERROR', params: { message: errorMessage}});  // vue-router
-        }
+    unregisterInterceptor() {
+        this.unregister();
     }
-
 }
-

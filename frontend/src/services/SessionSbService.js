@@ -1,14 +1,19 @@
 export class SessionSbService {
+    BROWSER_STORAGE_ITEM_NAME;
+    RESOURCES_URL;
+    currentAccount;
     constructor(resourcesUrl, browserStorageItemName) {
         console.log("Created SessionService...");
         this.BROWSER_STORAGE_ITEM_NAME = browserStorageItemName;
         this.RESOURCES_URL = resourcesUrl;
+        console.log(this.RESOURCES_URL)
         this._currentAccount = null;
         this._currentToken = null;
         // Retrieve the current user info from browser storage,
         // e.g., after a page reload or when a new tab is opened.
         this.getTokenFromBrowserStorage();
     }
+
 
 
     get currentAccount() {
@@ -59,17 +64,18 @@ export class SessionSbService {
             });
 
             if (response.ok) {
+                let account = await response.json();
                 const token = response.headers.get('Authorization');
-                console.log("Token: ", token);
-                // const user = await response.json();
-                // this.saveTokenIntoBrowserStorage(token, user);
-                // return  user;
+                this.saveTokenIntoBrowserStorage(token, account);
+                return { account, token }; // Return both account and token
             } else {
                 console.log(response);
+                console.log(this.RESOURCES_URL)
                 return null;
             }
         } catch (error) {
-            console.error('RequestError occurred during sign-in:', error);
+            console.error('Error occurred during sign-in:', error);
+            console.log(this.RESOURCES_URL)
             return null;
         }
     }

@@ -18,7 +18,7 @@ export default {
 
   provide() {
     this.theSessionService = shallowReactive(
-        new SessionSbService(CONFIG.AUTHENTICATION_URL, CONFIG.JWT_STORAGE_ITEM)
+        new SessionSbService( CONFIG.BACKEND_URL + "/authentication", CONFIG.JWT_STORAGE_ITEM) // TODO FIX RESOUR URL
     )
     this.theFetchInterceptor =
         new FetchInterceptor(this.theSessionService, this.$router)

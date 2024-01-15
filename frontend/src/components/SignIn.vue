@@ -12,8 +12,8 @@
       <div class="form-group">
         <button @click="signIn" class="btn btn-primary">Sign In</button>
       </div>
-      <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
-      <p v-if="token">Token: {{ token }}</p>
+      <p v-if="errorMessage !== null && errorMessage !== undefined" class="error-message">{{ errorMessage }}</p>
+      <p v-if="token !== null && token !== undefined">Token: {{ token }}</p>
     </form>
   </div>
 </template>
