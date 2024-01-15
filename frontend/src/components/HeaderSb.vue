@@ -1,28 +1,3 @@
-<script>
-
-export default {
-  inject: ['sessionService'],
-
-  name: "HeaderSb",
-  data() {
-    return {
-      dateToday: String,
-    }
-  },
-  computed: {
-    getCurrentDate() {
-      const weekday = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-      const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September",
-        "October", "November", "December"];
-      const date = new Date();
-      return `${weekday[date.getDay()]}, ${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`
-    }
-  },
-  setup() {
-  }
-}
-</script>
-
 <template>
   <div class="bg-success row justify-content-between m-0">
     <div class="col">
@@ -46,6 +21,30 @@ export default {
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  inject: ['sessionService'],
+
+  name: "HeaderSb",
+  data() {
+    return {
+      dateToday: String,
+    }
+  },
+  computed: {
+    getCurrentDate() {
+      const weekday = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+      const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September",
+        "October", "November", "December"];
+      const date = new Date();
+      return `${weekday[date.getDay()]}, ${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`
+    }
+  },
+  setup() {
+  }
+}
+</script>
 
 <style scoped>
 </style>

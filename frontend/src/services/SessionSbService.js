@@ -56,14 +56,15 @@ export class SessionSbService {
             let response = await fetch(`http://localhost:8086/api/authentication/login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: body
+                body: body,
+                credentials: 'include'
             });
 
             if (response.ok) {
-                let account = await response.json();
+                const user = await response.json();
                 const token = response.headers.get('Authorization');
-                this.saveTokenIntoBrowserStorage(token, account);
-                return { account, token }; // Return both account and token
+                this.saveTokenIntoBrowserStorage(token, user);
+                return  user;
             } else {
                 console.log(response);
                 return null;

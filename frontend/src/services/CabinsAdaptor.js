@@ -13,7 +13,7 @@ export class CabinsAdaptor {
         if (response.ok) {
             return await response.json();
         } else {
-            console.log(response, !response.bodyUsed ? await response.text() : "");
+            console.log(response);
             return null;
         }
     }

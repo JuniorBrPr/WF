@@ -1,6 +1,6 @@
 <template>
   <div>
-    <form @submit.prevent="signIn">
+    <form>
       <div class="form-group">
         <label for="email">Email:</label>
         <input type="email" id="email" v-model="email" class="form-control" required>
@@ -10,7 +10,7 @@
         <input type="password" id="password" v-model="password" class="form-control" required>
       </div>
       <div class="form-group">
-        <button type="submit" class="btn btn-primary">Sign In</button>
+        <button @click="signIn" class="btn btn-primary">Sign In</button>
       </div>
       <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
       <p v-if="token">Token: {{ token }}</p>
@@ -19,7 +19,6 @@
 </template>
 
 <script>
-import { inject } from 'vue';
 import {useRoute} from "vue-router";
 
 export default {
@@ -33,26 +32,20 @@ export default {
       token: null,
     };
   },
-  setup() {
-    const sessionService = inject('sessionSbService');
+  mounted() {
     const route = useRoute();
-
-    const isAuthenticated = sessionService.isAuthenticated;
-
     // Check for the signOff query parameter in the route
     if (route.query.signOff) {
-      sessionService.signOut(); // Call signOut method if signOff parameter is present
+      this.sessionService.signOut(); // Call signOut method if signOff parameter is present
     }
-
-    return {
-      sessionService,
-      isAuthenticated,
-    };
   },
   methods: {
     async signIn() {
       try {
-        const response = await this.sessionService.asyncSignIn(this.email, this.password);
+        console.log('Signing in...');
+        console.log('Email:' + this.email);
+        console.log('Password: ' + this.password);
+        const response = await this.sessionService.asyncSignIn(this.email, this.password)
         if (response) {
           console.log('SignIn successful:', response);
           console.log('Token:', response.token);
